@@ -1,6 +1,6 @@
 ---
 title: Installing an HDL toolchain from source
-created_at: 2023-06-26T17:04:00+1000
+created_at: 2023-06-27T00:01:00+1000
 kind: article
 draft: true
 ---
@@ -23,7 +23,7 @@ documentation tends to point back to their own pre-built packages (and products)
 in preference to (and sometimes instead of) instructing on how to build.
 
 I've done this process three times recently while rejigging my development
-environments, so I'm describing it for posterity.
+environments, so I'm describing it for posterity/others.
 
 [requirements]: https://github.com/charlottia/sh1107/tree/aeb1c3f77d3226760755331624dd7920779cc2b7#requirements
 [OSS CAD Suite]: https://github.com/YosysHQ/oss-cad-suite-build
@@ -68,7 +68,7 @@ beautifully. We'll use it, but we'll build it separately, too: for cases when we
 want to make our own changes, or use step-through debugging to understand what's
 happening. It's also necessary for formal verification.
 
-[nextpnr] and [Project IceStorm] are for targetting the Lattice [iCE40] family
+[nextpnr] and [Project IceStorm] are for targeting the Lattice [iCE40] family
 of FPGAs, which is known for its relative accessibility. I've been learning with
 an [iCEBreaker] ([see also][iCEBreaker on Crowd Supply]), which is built around
 the iCE40UP5k FPGA, and have found this to be true.
@@ -118,7 +118,7 @@ itself, and then follow the instructions for your shell.
 Now install the Python `asdf` plugin, and install the latest stable version of
 Python:
 
-```console
+```console?prompt=$
 ~ $ asdf plugin add python
 initializing plugin repository...Cloning into '/home/charlotte/.asdf/repository'...
 remote: Enumerating objects: 5273, done.
@@ -132,7 +132,7 @@ Resolving deltas: 100% (2849/2849), done.
 ~ $ asdf install python 3.11.4
 python-build 3.11.4 /home/charlotte/.asdf/installs/python/3.11.4
 Downloading Python-3.11.4.tar.xz...
-→ https://www.python.org/ftp/python/3.11.4/Python-3.11.4.tar.xz
+-> https://www.python.org/ftp/python/3.11.4/Python-3.11.4.tar.xz
 Installing Python-3.11.4...
 Installed Python-3.11.4 to /home/charlotte/.asdf/installs/python/3.11.4
 ~ $ asdf global python 3.11.4
@@ -143,11 +143,11 @@ Installed Python-3.11.4 to /home/charlotte/.asdf/installs/python/3.11.4
 There's also 3.12.0b3 available at time of writing, if you don't mind a beta.)
 
 The last command makes it the default Python for our user. `asdf` puts some
-shims in our PATH which use a combination of our configured defaults (`global`),
+shims in our `PATH` which use a combination of our configured defaults (`global`),
 our current path (`local`), and environment variables (`shell`) to select the
 desired version:
 
-```console
+```console?prompt=$,>>>
 ~ $ which python
 /home/charlotte/.asdf/shims/python
 ~ $ asdf current python
@@ -162,6 +162,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 [asdf]: https://asdf-vm.com/
 [asdf getting started]: https://asdf-vm.com/guide/getting-started.html
+
 
 ### venv
 
@@ -256,18 +257,341 @@ Note that the virtual environment remained active even as we left the directory
 we created it in. This is desirable: it means the editable snapshot was
 installed in our virtual environment.
 
+We'll install the [board definitions][amaranth-boards] now, too. Clone the
+repository and install it the same way, except without the `[builtin-yosys]`
+option:
+
+```console
+(venv) amaranth $ cd ..
+(venv) ~ $ git clone https://github.com/amaranth-lang/amaranth-boards
+Cloning into 'amaranth-boards'...
+remote: Enumerating objects: 1353, done.
+remote: Counting objects: 100% (532/532), done.
+remote: Compressing objects: 100% (136/136), done.
+remote: Total 1353 (delta 426), reused 405 (delta 396), pack-reused 821
+Receiving objects: 100% (1353/1353), 307.90 KiB | 17.11 MiB/s, done.
+Resolving deltas: 100% (943/943), done.
+(venv) ~ $ cd amaranth-boards/
+(venv) amaranth-boards $ pip install --editable .
+Obtaining file:///home/charlotte/amaranth-boards
+  Installing build dependencies ... done
+  Checking if build backend supports build_editable ... done
+  Getting requirements to build editable ... done
+  Preparing editable metadata (pyproject.toml) ... done
+
+[... lots of output ...]
+
+Successfully built amaranth-boards
+Installing collected packages: amaranth-boards
+Successfully installed amaranth-boards-0.1.dev228+g54e6ac4
+(venv) amaranth-boards $
+```
+
+We're ready. We can verify the installations by using a Python shell in the
+virtual environment:
+
+```console?prompt=$,>>>
+(venv) prj $ python
+Python 3.11.4 (main, Jun 26 2023, 16:06:57) [GCC 10.2.1 20210110] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from amaranth import *
+>>> Signal
+<class 'amaranth.hdl.ast.Signal'>
+>>> from amaranth_boards.icebreaker import *
+>>> ICEBreakerPlatform
+<class 'amaranth_boards.icebreaker.ICEBreakerPlatform'>
+>>>
+```
+
 [Amaranth installation instructions]: https://amaranth-lang.org/docs/amaranth/latest/install.html
 [amaranth-boards]: https://github.com/amaranth-lang/amaranth-boards
 
 ## Yosys
 
-TODO
+Clone the [Yosys repo] and read its README. [§ Building from Source] tells you
+which packages from the package manager it needs.
 
-## nextpnr with Project IceStorm
+By default, Yosys will install into `/usr/local`, but we'll override it to use
+`~/.local` instead. We do this by setting the `PREFIX` variable, and
+importantly, we need it set for the build step too, not just install. Otherwise,
+the `yosys-config` helper that gets installed will report the wrong values.
 
-TODO
+Yosys's Makefile will include `Makefile.conf` if it exists; we'll put it in
+there so we can't forget, and don't have to stash Makefile changes when we pull
+the latest. Then we build in parallel and install:
 
-## SymbiYosys and Z3
+```console?prompt=%20yosys%20$
+(venv) yosys $ echo 'PREFIX = $(HOME)/.local' > Makefile.conf
+(venv) yosys $ make -j8
+[Makefile.conf] PREFIX = $(HOME)/.local
+[  0%] Building kernel/version_2310a0ea9.cc
+[  0%] Building kernel/driver.o
+[  0%] Building techlibs/common/simlib_help.inc
+[  0%] Building techlibs/common/simcells_help.inc
+[  1%] Building kernel/rtlil.o
+
+[... lots of output ...]
+
+[ 94%] ABC: `` Compiling: /src/bdd/llb/llb4Nonlin.c
+[ 94%] ABC: `` Compiling: /src/bdd/llb/llb4Sweep.c
+[ 94%] ABC: `` Building binary: abc-1de4eaf
+[100%] Building yosys-abc
+
+  Build successful.
+
+(venv) yosys $ make install
+[Makefile.conf] PREFIX = $(HOME)/.local
+mkdir -p /home/charlotte/.local/bin
+cp yosys yosys-config yosys-abc yosys-filterlib yosys-smtbmc yosys-witness /home/charlotte/.local/bin
+strip -S /home/charlotte/.local/bin/yosys
+strip /home/charlotte/.local/bin/yosys-abc
+strip /home/charlotte/.local/bin/yosys-filterlib
+mkdir -p /home/charlotte/.local/share/yosys
+cp -r share/. /home/charlotte/.local/share/yosys/.
+(venv) yosys $
+```
+
+You may need to add `~/.local/bin` to your `PATH`. Test the installed binary.
+Check the `yosys-config` output:
+
+```console
+(venv) yosys $ yosys-config --datdir
+/home/charlotte/.local/share/yosys
+(venv) yosys $ 
+```
+
+[Yosys repo]: https://github.com/yosyshq/yosys
+[§ Building from Source]: https://github.com/yosyshq/yosys#building-from-source
+
+
+## Project IceStorm
+
+Before [nextpnr], we need the technology-specific support. That's this step.
+
+Clone [Project IceStorm]. There's no `Makefile.conf` here, so edit the first
+line of `config.mk`:
+
+```diff
+-PREFIX ?= /usr/local
++PREFIX = $(HOME)/.local
+```
+
+Install the libftdi development package; it's `libftdi-dev` on Debian and
+`libftdi` in Homebrew.
+
+Now compile and install Project IceStorm. I've avoided compiling in parallel as
+its build script sometimes gets ahead of itself:
+
+```console?prompt=icestorm%20$
+(venv) icestorm $ make
+make -C icebox all
+make[1]: Entering directory '/home/charlotte/icestorm/icebox'
+python3 icebox_chipdb.py -3 > chipdb-384.new
+mv chipdb-384.new chipdb-384.txt
+
+[... lots of output ...]
+
+cc -MD -MP -O2  -Wall -std=c99 -I/home/charlotte/.local/include    -c -o mpsse.o mpsse.c
+cc -o iceprog  iceprog.o mpsse.o -lm -lstdc++ -lftdi
+make[1]: Leaving directory '/home/charlotte/icestorm/iceprog'
+(venv) icestorm $ make install
+for dir in icebox icepack icemulti icepll icebram icetime iceprog; do \
+        make -C $dir install || exit; \
+done
+make[1]: Entering directory '/home/charlotte/icestorm/icebox'
+mkdir -p /home/charlotte/.local/share/icebox
+
+[... lots of output ...]
+
+mkdir -p /home/charlotte/.local/bin
+cp iceprog /home/charlotte/.local/bin/iceprog
+make[1]: Leaving directory '/home/charlotte/icestorm/iceprog'
+(venv) icestorm $
+```
+
+If you have an iCEBreaker, at this stage you can try using `iceprog` just to say
+hi:
+
+TODO: check this output
+
+```console
+(venv) icestorm $ iceprog -t
+init..
+cdone: high
+reset..
+cdone: low
+flash ID: 0xEF 0x40 0x16 0x00
+cdone: high
+Bye.
+(venv) icestorm $
+```
+
+The following error indicates the device wasn't found by `iceprog`:
+
+```
+Can't find iCE FTDI USB device (vendor_id 0x0403, device_id 0x6010).
+ABORT.
+```
+
+Check `lsusb`. If you can see something with ID `0403:6010`, that's good. If it
+identifies itself as an iCEBreaker, even better. You may just need a [udev] rule
+to ensure the device node is writable by your user.
+
+TODO: that udev rule. ensure user is plugdev etc.
+
+If you see the device but it doesn't state who it is, try unplugging the cable
+and plugging it back in again. (I suggest doing this on the host side, to
+minimize stress on the board!) I'm serious. Sometimes doing it twice is the
+trick. When `iceprog -t` identifies it, it's good.
+
+WSL 2 users (or recalcitrant Windows users) should also consult the
+footnote[^wslice].
+
+[udev]: https://opensource.com/article/18/11/udev
+
+
+## nextpnr
+
+Fetch [nextpnr] and install the appropriate [§ Prerequisites]. Then, check out
+the specific instructions for [nextpnr-ice40]. We'll need to adapt them
+slightly.
+
+We specify the iCE40 arch, the install prefix, the install prefix for Project
+IceStorm, and finally, a [runtime search path][rpath] to add to the final binary.  This is because nextpnr will link against our Python install, but our Python install's shared libraries aren't on the [system search path][ldso].
+
+
+```console?prompt=nextpnr%20$,%20%20%20%20
+(venv) nextpnr $ cmake . -DARCH=ice40 \
+                 -DCMAKE_INSTALL_PREFIX=$HOME/.local \
+                 -DICESTORM_INSTALL_PREFIX=$HOME/.local \
+                 -DCMAKE_INSTALL_RPATH="$(asdf where python)"/lib
+-- Building with IPO
+-- Found Python3: /home/charlotte/.asdf/shims/python3 (found suitable version "3.11.4", minimum required is "3.5") found components: Interpreter
+-- Found Python3: /home/charlotte/.asdf/installs/python/3.11.4/include/python3.11 (found suitable version "3.11.4", minimum required is "3.5") found components: Development Development.Module Development.E
+mbed
+-- Found Boost: /usr/include (found version "1.74.0") found components: filesystem program_options iostreams system thread regex chrono date_time atomic
+-- Found Boost: /usr/include (found version "1.74.0") found components: program_options filesystem system
+-- Configuring architecture: ice40
+-- Enabled iCE40 devices: 384;1k;5k;u4k;8k
+-- Found Python3: /home/charlotte/.asdf/shims/python3 (found suitable version "3.11.4", minimum required is "3.5") found components: Interpreter
+-- IceStorm install prefix: /home/charlotte/.local
+-- icebox data directory: /home/charlotte/.local/share/icebox
+-- Using iCE40 chipdb: /home/charlotte/nextpnr/ice40/chipdb
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/charlotte/nextpnr
+(venv) nextpnr $ make -j8
+[  2%] Generating chipdb/chipdb-384.bba
+[  2%] Building CXX object bba/CMakeFiles/bbasm.dir/main.cc.o
+[  4%] Generating chipdb/chipdb-1k.bba
+[  5%] Linking CXX executable bbasm
+
+[... lots of output ...]
+
+[ 97%] Building CXX object CMakeFiles/nextpnr-ice40.dir/ice40/pack.cc.o
+[ 98%] Building CXX object CMakeFiles/nextpnr-ice40.dir/ice40/pcf.cc.o
+[100%] Linking CXX executable nextpnr-ice40
+[100%] Built target nextpnr-ice40
+(venv) nextpnr $ make install
+[  7%] Built target chipdb-ice40-bbas
+[ 10%] Built target bbasm
+[ 17%] Built target chipdb-ice40-bins
+[ 32%] Built target chipdb-ice40
+[100%] Built target nextpnr-ice40
+Install the project...
+-- Install configuration: "Release"
+-- Installing: /home/charlotte/.local/bin/nextpnr-ice40
+-- Set runtime path of "/home/charlotte/.local/bin/nextpnr-ice40" to "/home/charlotte/.asdf/installs/python/3.11.4/lib"
+(venv) nextpnr $
+```
+
+The `asdf` shim path for the Python executable is mentioned in the output, but
+it's OK—it's only used during build.
+
+Test the installed binary to make sure it works.
+
+```console
+(venv) nextpnr $ nextpnr-ice40
+"nextpnr-ice40" -- Next Generation Place and Route (Version nextpnr-0.6-29-g54b20457)
+
+General options:
+  -h [ --help ]                         show help
+  -v [ --verbose ]                      verbose output
+  -q [ --quiet ]                        quiet mode, only errors and warnings
+                                        displayed
+  --Werror                              Turn warnings into errors
+  -l [ --log ] arg                      log file, all log messages are written
+                                        to this file regardless of -q
+
+[... lots of output ...]
+
+  --opt-timing                          run post-placement timing optimisation
+                                        pass (experimental)
+  --tmfuzz                              run path delay estimate fuzzer
+  --pcf-allow-unconstrained             don't require PCF to constrain all IO
+
+(venv) nextpnr $
+```
+
+At this point our Amaranth can now use our installed tooling to program the
+iCEBreaker. The board definitions we installed earlier can be executed directly
+to program a test blink gateware—doing this exercises the full toolchain.
+Verify:
+
+TODO: working output pls
+
+```console?prompt=nextpnr%20$
+(venv) nextpnr $ python -m amaranth_boards.icebreaker
+init..
+Can't find iCE FTDI USB device (vendor_id 0x0403, device_id 0x6010 or 0x6014).
+ABORT.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/charlotte/amaranth-boards/amaranth_boards/icebreaker.py", line 75, in <module>
+    p.build(Blinky(), do_program=True)
+  File "/home/charlotte/amaranth/amaranth/build/plat.py", line 113, in build
+    self.toolchain_program(products, name, **(program_opts or {}))
+  File "/home/charlotte/amaranth-boards/amaranth_boards/icebreaker.py", line 68, in toolchain_program
+    subprocess.check_call([iceprog, bitstream_filename])
+  File "/home/charlotte/.asdf/installs/python/3.11.4/lib/python3.11/subprocess.py", line 413, in check_call
+    raise CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command '['iceprog', '/tmp/amaranth_l7n0foy0_top.bin']' returned non-zero exit status 2.
+(venv) nextpnr $
+```
+
+[§ Prerequisites]: https://github.com/YosysHQ/nextpnr#prerequisites
+[nextpnr-ice40]: https://github.com/YosysHQ/nextpnr#nextpnr-ice40
+[rpath]: https://duerrenberger.dev/blog/2021/08/04/understanding-rpath-with-cmake/
+[ldso]: https://unix.stackexchange.com/a/22999/577154
+
+
+## SymbiYosys
+
+[Formal verification] can be orchestrated with SymbiYosys. To get started with
+formal verification and Amaranth, have a look at [Robert Baruch's graded
+exercises for Amaranth HDL][amaranth-exercises], which start with formal methods
+from the very first exercise. They use the tools we install here.
+
+[SymbiYosys] is a relatively simple driver, so fetch the repo and install:
+
+```console?prompt=sby%20$
+(venv) sby $ make PREFIX=$HOME/.local install
+mkdir -p /home/charlotte/.local/bin
+mkdir -p /home/charlotte/.local/share/yosys/python3
+cp sbysrc/sby_*.py /home/charlotte/.local/share/yosys/python3/
+sed -e 's|##yosys-program-prefix##|"''"|' < sbysrc/sby_core.py > /home/charlotte/.local/share/yosys/python3/sby_core.py
+sed 's|##yosys-sys-path##|sys.path += [os.path.dirname(__file__) + p for p in ["/share/python3", "/../share/yosys/python3"]]|;' < sbysrc/sby.py > /home/charlotte/.local/bin/sby
+chmod +x /home/charlotte/.local/bin/sby
+(venv) sby $
+```
+
+XXX
+
+
+[amaranth-exercises]: https://github.com/RobertBaruch/amaranth-exercises
+
+## Z3
 
 TODO
 
@@ -293,5 +617,13 @@ TODO
     devices] using [usbipd-win]. Don't mind the scary warning on the guide: I
     didn't have to recompile my kernel even on Windows 10.
 
+[^wslice]: You may also need to use [Zadig] — use the WinUSB
+    driver. You'll probably need to check "List All Devices" in the options
+    menu. You should see two entries that correspond to the iCEBreaker
+    "Interface 0" and "Interface 1", and they might identify themselves as the
+    iCEBreaker, or something less obvious ("RS2232 Interface"). Make sure you
+    use the same driver for both. When in doubt, unplug and replug.
+
 [Connect USB devices]: https://learn.microsoft.com/en-us/windows/wsl/connect-usb
 [usbipd-win]: https://github.com/dorssel/usbipd-win
+[Zadig]: https://zadig.akeo.ie/

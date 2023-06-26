@@ -7,7 +7,7 @@
 
 body {
   background: #fff;
-  max-width: 820px;
+  max-width: 880px;
 }
 
 a:link,
@@ -22,10 +22,11 @@ a:hover {
 main {
   float: right;
 
-  width: 500px;
+  width: 540px;
 
   margin-top: 40px;
   margin-left: 60px;
+  margin-right: 20px;
 }
 
 main h1 {
@@ -167,7 +168,7 @@ footer {
   margin-left: 20px;
   margin-top: 20px;
 
-  width: 760px;
+  width: 840px;
 
   padding-top: 20px;
   padding-bottom: 40px;
@@ -177,7 +178,7 @@ footer {
   text-align: center;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 880px) {
   main {
     float: none;
 
@@ -200,13 +201,13 @@ footer {
   }
 
   footer {
-    max-width: 500px;
+    max-width: 540px;
 
     margin-left: 60px;
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 640px) {
   main {
     width: auto;
 
