@@ -1,0 +1,19 @@
+text_extensions: [ 'adoc', 'asciidoc', 'atom', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'htm', 'html', 'js', 'less', 'markdown', 'md', 'ms', 'mustache', 'php', 'rb', 'rdoc', 'sass', 'scss', 'slim', 'tex', 'txt', 'xhtml', 'xml' ]
+
+prune:
+  auto_prune: true
+
+data_sources:
+  - type: filesystem
+    encoding: utf-8
+
+base_url: https://notes.hrzn.ee
+title: Notes
+author_name: Charlotte
+author_uri: https://notes.hrzn.ee
+
+deploy:
+  default:
+    kind: rsync
+    dst: "aurora:~/w/notes"
+    options: ["-avz", "--delete-after"]

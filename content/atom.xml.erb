@@ -1,0 +1,4 @@
+<%
+  relevant_articles = articles.select { |i| !i[:draft] }
+%>
+<%= relevant_articles.any? ? atom_feed(limit: 50, articles: relevant_articles) : "" %>

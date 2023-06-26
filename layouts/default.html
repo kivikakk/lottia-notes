@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><%= @config[:title] %> - <%= @item[:title] %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/stylesheet.css">
+
+    <% if articles.select { |i| !i[:draft] }.any? %>
+      <link href="/atom.xml" rel="alternate" title="<%= @config[:title] %>" type="application/atom+xml">
+    <% end %>
+    <meta name="generator" content="Nanoc <%= Nanoc::VERSION %>">
+  </head>
+  <body>
+    <main>
+      <h1><%= @item[:title] %></h1>
+      <% if created_at = @item[:created_at] %>
+        <p class="created-at"><%= created_at.strftime("%Y-%m-%d") %></p>
+      <% end %>
+      <%= yield %>
+    </main>
+    <div id="sidebar">
+      <ul>
+        <li><%= link_to "Home", @items["/index.*"] %></li>
+        <li><%= link_to "Author", "https://github.com/charlottia", rel: "me" %></li>
+      </ul>
+
+      <% if (items = sorted_articles.select { |item| !item[:draft] }).any? %>
+        <h2>Notes</h2>
+        <ul>
+          <% items.each do |item| %>
+            <li><%= link_to item[:title], item %></li>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <% if (items = sorted_articles.select { |item| item[:draft] }).any? %>
+        <h2>Drafts</h2>
+        <ul>
+          <% items.each do |item| %>
+            <li><%= link_to item[:title], item %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+    <div id="footer-clear"></div>
+    <footer>
+      <p>
+        Licensed under the <a
+        href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>
+        by its author.
+      </p>
+    </footer>
+  </body>
+</html>

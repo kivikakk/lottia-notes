@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+compile '/**/*.md' do
+  filter :erb
+  filter :commonmarker
+  layout '/default.*'
+
+  if item.identifier =~ '**/index.*'
+    target = item.identifier.without_ext + '.html'
+  else
+    target = item.identifier.without_ext + '/index.html'
+  end
+
+  if item[:draft]
+    target = target.gsub!(%r{\A/posts/}, '/drafts/')
+  end
+
+  write target
+end
+
+compile '/*.xml.erb' do
+  filter :erb
+  write item.identifier.without_ext
+end
+
+compile '/**/*' do
+  write item.identifier.to_s
+end
+
+layout '/**/*', :erb
