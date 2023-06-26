@@ -7,3 +7,5 @@ end
 
 gem "builder"
 gem "commonmarker", "~> 1.0.0pre9"
+gem "rouge"
+gem "nokogiri"

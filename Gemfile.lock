@@ -72,12 +72,15 @@ GEM
       listen (~> 3.0)
       nanoc-cli (~> 4.11, >= 4.11.14)
       nanoc-core (~> 4.11, >= 4.11.14)
+    nokogiri (1.15.2-arm64-darwin)
+      racc (~> 1.4)
     parallel (1.23.0)
     pastel (0.8.0)
       tty-color (~> 0.5)
     psych (4.0.6)
       stringio
     public_suffix (5.0.1)
+    racc (1.7.1)
     rack (3.0.8)
     rack-livereload (0.5.1)
       rack
@@ -88,6 +91,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rbtree (0.4.6)
+    rouge (4.1.2)
     set (1.0.3)
     slow_enumerator_tools (1.1.0)
     sorted_set (1.0.3)
@@ -110,6 +114,8 @@ DEPENDENCIES
   commonmarker (~> 1.0.0pre9)
   nanoc
   nanoc-live
+  nokogiri
+  rouge
 
 BUNDLED WITH
    2.4.14

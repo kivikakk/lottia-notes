@@ -1,6 +1,6 @@
 ---
 title: Installing an HDL toolchain from source
-created_at: 2023-06-25T21:02:00+1000
+created_at: 2023-06-26T17:04:00+1000
 kind: article
 draft: true
 ---
@@ -81,7 +81,10 @@ inconsistent[^windows] enough that it was easier to use WSL 2[^wsl].  On Linux
 and WSL, I've used Debian.
 
 I assume Linux users can install packages using the distribution package
-manager, and macOS users using [Homebrew].
+manager, and macOS users using [Homebrew].  I'm going to avoid installing almost
+anything globally, however, that wouldn't already get installed by your package
+manager as a matter of course, especially when there's reasons you might need
+multiple versions around.
 
 [HDL]: https://en.wikipedia.org/wiki/Hardware_description_language
 [Verilog]: https://en.wikipedia.org/wiki/Verilog
@@ -105,12 +108,155 @@ acquiring it through your relevant package manager.
 
 ## Python 3
 
-TODO
+That was easy. Now the opinions start.
+
+Install the [`asdf` Multiple Version Runtime Manager][asdf]. The [Getting
+Started][asdf getting started] page has commands for dependency installation
+through package manager.  Use the official `git` method to download `asdf`
+itself, and then follow the instructions for your shell.
+
+Now install the Python `asdf` plugin, and install the latest stable version of
+Python:
+
+```console
+~ $ asdf plugin add python
+initializing plugin repository...Cloning into '/home/charlotte/.asdf/repository'...
+remote: Enumerating objects: 5273, done.
+remote: Counting objects: 100% (481/481), done.
+remote: Compressing objects: 100% (88/88), done.
+remote: Total 5273 (delta 419), reused 445 (delta 393), pack-reused 4792
+Receiving objects: 100% (5273/5273), 1.21 MiB | 29.47 MiB/s, done.
+Resolving deltas: 100% (2849/2849), done.
+~ $ asdf latest python
+3.11.4
+~ $ asdf install python 3.11.4
+python-build 3.11.4 /home/charlotte/.asdf/installs/python/3.11.4
+Downloading Python-3.11.4.tar.xz...
+→ https://www.python.org/ftp/python/3.11.4/Python-3.11.4.tar.xz
+Installing Python-3.11.4...
+Installed Python-3.11.4 to /home/charlotte/.asdf/installs/python/3.11.4
+~ $ asdf global python 3.11.4
+~ $
+```
+
+(You might get some warnings about extensions not being compiled. That's OK.
+There's also 3.12.0b3 available at time of writing, if you don't mind a beta.)
+
+The last command makes it the default Python for our user. `asdf` puts some
+shims in our PATH which use a combination of our configured defaults (`global`),
+our current path (`local`), and environment variables (`shell`) to select the
+desired version:
+
+```console
+~ $ which python
+/home/charlotte/.asdf/shims/python
+~ $ asdf current python
+python          3.11.4          /home/charlotte/.tool-versions
+~ $ asdf which python
+/home/charlotte/.asdf/installs/python/3.11.4/bin/python
+~ $ python
+Python 3.11.4 (main, Jun 26 2023, 16:06:57) [GCC 10.2.1 20210110] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>
+```
+
+[asdf]: https://asdf-vm.com/
+[asdf getting started]: https://asdf-vm.com/guide/getting-started.html
+
+### venv
+
+The last thing we want to do is actually a per-project step. We're about to
+install Amaranth, which is a Python dependency, and so we want to make sure
+we're installing Python dependencies in a separate [virtual environment] per
+project, that they don't interfere or conflict with each other.
+
+In your project directory, create a new virtual environment called `venv`, and
+then activate it:
+
+```console
+prj $ python -m venv venv
+prj $ source venv/bin/activate
+(venv) prj $
+```
+
+(Note there are a few different `activate` variants in the `bin` directory for
+different shells.)
+
+Add `venv` to your `.gitignore` or similar.
+
+It's important to remember to activate the virtual environment before running
+Python or installing dependencies with `pip`. Many IDEs will automatically
+activate (or prompt to activate) virtual environments when they're detected in
+the root of a project. Similarly, some shells can be configured to do similar.
+
+Note that the Python instance used by the virtual environment is tied to the
+specific version we had chosen through `asdf`, and not the shim:
+
+```console
+(venv) prj $ readlink venv/bin/python
+/home/charlotte/.asdf/installs/python/3.11.4/bin/python
+(venv) prj $
+```
+
+We're ready to install Python dependencies.
+
+[virtual environment]: https://docs.python.org/3/library/venv.html
 
 ## Amaranth
 
-TODO
+Firstly, note Amaranth's own [installation instructions][Amaranth installation
+instructions]. We'll follow along, and deviate from them somewhat.
 
+Install GTKWave from your package manager. We'll come back to Yosys.
+
+Verify we do in fact have the latest `pip`:
+
+```console
+(venv) prj $ pip install --upgrade pip
+Requirement already satisfied: pip in ./venv/lib/python3.11/site-packages (23.1.2)
+(venv) prj $
+```
+
+We do not pass `--user` to `pip`—it is rejected in a virtual environment, for
+`--user` implies writing to your home directory, which would escape the virtual
+environment.
+
+We're going to skip the latest release and go straight to an editable
+development snapshot. You may want to clone it within your project directory, perhaps as a Git submodule, or along-side. I'm going with along-side.
+
+Clone Amaranth and install it in editable mode, with the built-in Yosys:
+
+```console
+(venv) prj $ cd ..
+(venv) ~ $ git clone https://github.com/amaranth-lang/amaranth
+Cloning into 'amaranth'...
+remote: Enumerating objects: 8651, done.
+remote: Counting objects: 100% (272/272), done.
+remote: Compressing objects: 100% (95/95), done.
+remote: Total 8651 (delta 170), reused 227 (delta 162), pack-reused 8379
+Receiving objects: 100% (8651/8651), 1.71 MiB | 29.14 MiB/s, done.
+Resolving deltas: 100% (6474/6474), done.
+(venv) ~ $ cd amaranth
+(venv) amaranth $ pip install --editable .[builtin-yosys]
+Obtaining file:///home/charlotte/amaranth
+  Installing build dependencies ... done
+  Checking if build backend supports build_editable ... done
+  Getting requirements to build editable ... done
+  Preparing editable metadata (pyproject.toml) ... done
+
+[... lots of output ...]
+
+Successfully built amaranth
+Installing collected packages: wasmtime, pyvcd, MarkupSafe, Jinja2, amaranth-yosys, amaranth
+Successfully installed Jinja2-3.1.2 MarkupSafe-2.1.3 amaranth-0.4.dev134+g99417d6 amaranth-yosys-0.25.0.0.post72 pyvcd-0.4.0 wasmtime-9.0.0
+(venv) amaranth $
+```
+
+Note that the virtual environment remained active even as we left the directory
+we created it in. This is desirable: it means the editable snapshot was
+installed in our virtual environment.
+
+[Amaranth installation instructions]: https://amaranth-lang.org/docs/amaranth/latest/install.html
 [amaranth-boards]: https://github.com/amaranth-lang/amaranth-boards
 
 ## Yosys
@@ -137,9 +283,6 @@ TODO
       (much!) slower.
     * Think you can fix some of this by using MSYS2 or Cygwin? Now you have two
       problems.
-
-<%# Is this a Comrak bug right here? Note the spacing for the list markers. The
-offset is wrong. %>
 
     There's more that I've decided was better left forgotten.
 

@@ -71,6 +71,10 @@ main ul li {
 }
 
 main pre {
+  overflow-x: scroll;
+
+  margin-bottom: 20px;
+
   padding: 8px 12px;
 }
 
@@ -79,12 +83,14 @@ main pre * {
 }
 
 main p code, main li code {
-  font-family: monospace;
-  font-size: 13px;
+  padding: 2px;
 
   border: 1px solid #e0e0e0;
+  
   background-color: #f0f0f0;
-  padding: 2px;
+  
+  font-family: monospace;
+  font-size: 13px;
 }
 
 main section.footnotes {
