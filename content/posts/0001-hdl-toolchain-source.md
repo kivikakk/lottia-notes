@@ -28,17 +28,19 @@ environments, so I'm describing it for posterity/others.
 [requirements]: https://github.com/charlottia/sh1107/tree/aeb1c3f77d3226760755331624dd7920779cc2b7#requirements
 [OSS CAD Suite]: https://github.com/YosysHQ/oss-cad-suite-build
 
+[^baby]: _baby's first gateware_, in fact.
 
-## Scope
+
+## <a href="#scope" aria-hidden="true" class="anchor" id="scope">🔗</a>Scope
 
 By the end of this guide, you'll have the following ready to go: 
 
-* [Git]
-* [Python 3]
-* [Amaranth]
-* [Yosys]
-* [nextpnr] with [Project IceStorm]
-* [SymbiYosys] and [Z3]
+* [Git] ([↴](#git))
+* [Python 3] ([↴](#python-3))
+* [Amaranth] ([↴](#amaranth))
+* [Yosys] ([↴](#yosys))
+* [nextpnr] ([↴](#nextpnr)) with [Project IceStorm] ([↴](#project-icestorm))
+* [SymbiYosys] ([↴](#symbiyosys)) and [Z3] ([↴](#z3))
 
 [Git]: https://git-scm.com/
 [Python 3]: https://www.python.org
@@ -48,6 +50,8 @@ By the end of this guide, you'll have the following ready to go:
 [Project IceStorm]: https://github.com/YosysHQ/icestorm
 [SymbiYosys]: https://github.com/YosysHQ/sby
 [Z3]: https://github.com/Z3Prover/z3
+
+(Click ↴ to jump to that section of the guide.)
 
 [Git] is for acquiring source code.
 
@@ -73,15 +77,15 @@ of FPGAs, which is known for its relative accessibility. I've been learning with
 an [iCEBreaker] ([see also][iCEBreaker on Crowd Supply]), which is built around
 the iCE40UP5k FPGA, and have found this to be true.
 
-[SymbiYosys] and [Z3] are for [formal verification].  I promise it's good.
+[SymbiYosys] and [Z3] are for [formal verification]. I promise it's good.
 
 Instructions are verified for Linux `x86_64` and macOS `arm64`. I intended to
 cover Windows, too, but over four months found the experience
-inconsistent[^windows] enough that it was easier to use WSL 2[^wsl].  On Linux
+inconsistent[^windows] enough that it was easier to use WSL 2[^wsl]. On Linux
 and WSL, I've used Debian.
 
 I assume Linux users can install packages using the distribution package
-manager, and macOS users using [Homebrew].  I'm going to avoid installing almost
+manager, and macOS users using [Homebrew]. I'm going to avoid installing almost
 anything globally, however, that wouldn't already get installed by your package
 manager as a matter of course, especially when there's reasons you might need
 multiple versions around.
@@ -97,8 +101,33 @@ multiple versions around.
 [formal verification]: https://en.wikipedia.org/wiki/Formal_verification
 [Homebrew]: https://brew.sh/
 
+[^windows]: * Lots of random things are a little bit broken.
+    * Building Yosys is certainly achievable but [you simply don't wanna][Yosys
+      on Windows].
+    * _Everything runs slower_. Everything. Git runs slower. Python runs slower.
+      Batch scripts run slower. Yosys runs slower. `iceprog` communicates
+      (much!) slower.
+    * Think you can fix some of this by using MSYS2 or Cygwin? Now you have two
+      problems.
 
-## Git
+    There's more that I've decided was better left forgotten.
+
+[Yosys on Windows]: https://github.com/YosysHQ/yosys/blob/2310a0ea9a61ed14d2769f01283a5a7590cbe558/guidelines/Windows
+
+[^wsl]: tl;dr: use your Linux user home directory, not your Windows user one; if
+    CMake takes forever during configure, check if your `PATH` is full of
+    `/mnt/...` — if it is, it's probably searching your Windows partition very
+    slowly (disable [`interop.appendWindowsPath`] or modify your `PATH` just for
+    configure); when it comes time to flash your board, follow the guide to
+    [Connect USB devices] using [usbipd-win]. Don't mind the scary warning on
+    the guide: I didn't have to recompile my kernel even on Windows 10.
+
+[`interop.appendWindowsPath`]: https://learn.microsoft.com/en-us/windows/wsl/wsl-config#interop-settings
+[Connect USB devices]: https://learn.microsoft.com/en-us/windows/wsl/connect-usb
+[usbipd-win]: https://github.com/dorssel/usbipd-win
+
+
+## <a href="#git" aria-hidden="true" class="anchor" id="git">🔗</a>Git <a href="#scope" title="Back to scope">↩</a>
 
 The [Git] website's [Downloads][Git downloads] page has instructions for
 acquiring it through your relevant package manager.
@@ -106,13 +135,13 @@ acquiring it through your relevant package manager.
 [Git downloads]: https://git-scm.com/downloads
 
 
-## Python 3
+## <a href="#python-3" aria-hidden="true" class="anchor" id="python-3">🔗</a>Python 3 <a href="#scope" title="Back to scope">↩</a>
 
 That was easy. Now the opinions start.
 
 Install the [`asdf` Multiple Version Runtime Manager][asdf]. The [Getting
 Started][asdf getting started] page has commands for dependency installation
-through package manager.  Use the official `git` method to download `asdf`
+through package manager. Use the official `git` method to download `asdf`
 itself, and then follow the instructions for your shell.
 
 Now install the Python `asdf` plugin, and install the latest stable version of
@@ -152,6 +181,8 @@ desired version:
 /home/charlotte/.asdf/shims/python
 ~ $ asdf current python
 python          3.11.4          /home/charlotte/.tool-versions
+~ $ asdf where python
+/home/charlotte/.asdf/installs/python/3.11.4
 ~ $ asdf which python
 /home/charlotte/.asdf/installs/python/3.11.4/bin/python
 ~ $ python
@@ -203,7 +234,7 @@ We're ready to install Python dependencies.
 
 [virtual environment]: https://docs.python.org/3/library/venv.html
 
-## Amaranth
+## <a href="#amaranth" aria-hidden="true" class="anchor" id="amaranth">🔗</a>Amaranth <a href="#scope" title="Back to scope">↩</a>
 
 Firstly, note Amaranth's own [installation instructions][Amaranth installation
 instructions]. We'll follow along, and deviate from them somewhat.
@@ -307,14 +338,15 @@ Type "help", "copyright", "credits" or "license" for more information.
 [Amaranth installation instructions]: https://amaranth-lang.org/docs/amaranth/latest/install.html
 [amaranth-boards]: https://github.com/amaranth-lang/amaranth-boards
 
-## Yosys
+
+## <a href="#yosys" aria-hidden="true" class="anchor" id="yosys">🔗</a>Yosys <a href="#scope" title="Back to scope">↩</a>
 
 Clone the [Yosys repo] and read its README. [§ Building from Source] tells you
 which packages from the package manager it needs.
 
 By default, Yosys will install into `/usr/local`, but we'll override it to use
 `~/.local` instead. We do this by setting the `PREFIX` variable, and
-importantly, we need it set for the build step too, not just install. Otherwise,
+importantly, we need it set for the build step too, not only install. Otherwise,
 the `yosys-config` helper that gets installed will report the wrong values.
 
 Yosys's Makefile will include `Makefile.conf` if it exists; we'll put it in
@@ -365,7 +397,7 @@ Check the `yosys-config` output:
 [§ Building from Source]: https://github.com/yosyshq/yosys#building-from-source
 
 
-## Project IceStorm
+## <a href="#project-icestorm" aria-hidden="true" class="anchor" id="project-icestorm">🔗</a>Project IceStorm <a href="#scope" title="Back to scope">↩</a>
 
 Before [nextpnr], we need the technology-specific support. That's this step.
 
@@ -410,8 +442,7 @@ make[1]: Leaving directory '/home/charlotte/icestorm/iceprog'
 (venv) icestorm $
 ```
 
-If you have an iCEBreaker, at this stage you can try using `iceprog` just to say
-hi:
+If you have an iCEBreaker, at this stage you can try using `iceprog` to say hi:
 
 ```console
 (venv) icestorm $ iceprog -t
@@ -425,6 +456,9 @@ Bye.
 (venv) icestorm $
 ```
 
+
+### Troubleshooting
+
 The following error indicates the device wasn't found by `iceprog`:
 
 ```
@@ -433,52 +467,99 @@ Can't find iCE FTDI USB device (vendor_id 0x0403, device_id 0x6010 or 0x6014).
 ABORT.
 ```
 
-Check `lsusb`. If you can see something with ID `0403:6010`, that's good. If it
-identifies itself as an iCEBreaker, even better. You may just need a [udev] rule
-to ensure the device node is writable by your user.
+macOS users, check System Information → USB. If you don't see the iCEBreaker
+listed, check your connections and consider trying a different USB cable,
+adaptor or hub, as appropriate.
 
-TODO: that udev rule. ensure user is plugdev etc.
+Linux users, check `lsusb`. If you can see something with ID `0403:6010`, that's
+good. If it identifies itself as an iCEBreaker, even better. You may need a
+[udev] rule to ensure the device node is writable by your user.
 
-If you see the device but it doesn't state who it is, try unplugging the cable
-and plugging it back in again. (I suggest doing this on the host side, to
-minimize stress on the board!) I'm serious. Sometimes doing it twice is the
-trick. When `iceprog -t` identifies it, it's good.
+Create the file `/etc/udev/rules.d/53-lattice-ftdi.rules` with the following
+content:
+
+```
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="0660", GROUP="plugdev", TAG+="uaccess"
+```
+
+This will make any device with ID `0403:6010` writable by the group `plugdev`.
+Check the output of the `id` command to verify your user groups:
+
+```console
+(venv) icestorm $ id -Gn
+charlotte adm sudo plugdev
+(venv) icestorm $
+```
+
+If `plugdev` is listed somewhere, you're good. Otherwise, add yourself to the
+group. (e.g. `sudo adduser $(whoami) plugdev`) After this, unplug and replug for
+the new rule to take effect.
 
 WSL 2 users (or recalcitrant Windows users) should also consult the
 footnote[^wslice].
 
 [udev]: https://opensource.com/article/18/11/udev
 
+[^wslice]: Firstly, create (or edit) the file `/etc/wsl.conf` and ensure you
+    have the following stanza (or know what you're doing already):
+    
+    ```ini
+    [boot]
+    command="service udev restart"
+    ```
 
-## nextpnr
+    Run `sudo service udev restart` to get udev going immediately. You can
+    `usbipd wsl detach -i 0403:6010` and then `attach` again instead of
+    physically messing around with cables.
+
+    This likely only applies to Windows Steelman Enthusiasts, but you _may_ also
+    need to use [Zadig]. Use the WinUSB driver. Check "List All Devices" in the
+    options menu. You should see two entries that correspond to the iCEBreaker —
+    "Interface 0" and "Interface 1" — and they might identify themselves as the
+    iCEBreaker, or something less obvious (like "Dual RS232-HS"). Make sure you
+    use the same driver for both. When in doubt, unplug and replug.
+
+[Zadig]: https://zadig.akeo.ie/
+
+
+## <a href="#nextpnr" aria-hidden="true" class="anchor" id="nextpnr">🔗</a>nextpnr <a href="#scope" title="Back to scope">↩</a>
+
+Ensure Project IceStorm ([↴](#project-icestorm)) is installed first.
 
 Fetch [nextpnr] and install the appropriate [§ Prerequisites]. Then, check out
 the specific instructions for [nextpnr-ice40]. We'll need to adapt them
 slightly.
 
 We specify the iCE40 arch, the install prefix, the install prefix for Project
-IceStorm, and finally, a [runtime search path][rpath] to add to the final
-binary.  This is because nextpnr will link against our Python install, but our
-Python install's shared libraries aren't on the [system search path][ldso].
+IceStorm, the root directory for our active Python installation, and finally, a
+[runtime search path][rpath] to add to the final binary. This is because nextpnr
+will link against our Python install, but our Python install's shared libraries
+aren't on the [system search path][ldso].
 
 
 ```console?prompt=nextpnr%20$,%20%20%20%20
 (venv) nextpnr $ cmake . -DARCH=ice40 \
                  -DCMAKE_INSTALL_PREFIX=$HOME/.local \
                  -DICESTORM_INSTALL_PREFIX=$HOME/.local \
+                 -DPython3_ROOT_DIR="$(asdf where python)" \
                  -DCMAKE_INSTALL_RPATH="$(asdf where python)"/lib
 -- Building with IPO
--- Found Python3: /home/charlotte/.asdf/shims/python3 (found suitable version "3.11.4", minimum required is "3.5") found components: Interpreter
--- Found Python3: /home/charlotte/.asdf/installs/python/3.11.4/include/python3.11 (found suitable version "3.11.4", minimum required is "3.5") found components: Development Development.Module Development.E
-mbed
+-- Found Python3: /home/charlotte/.asdf/installs/python/3.11.4/bin/python3 (found suitable version "3.11.4", minimum required is "3.5") found components: Interpreter
+-- Found Python3: /home/charlotte/.asdf/installs/python/3.11.4/include/python3.11 (found suitable version "3.11.4", minimum required is "3.5") found components: Development Development.Module Development.Embed
 -- Found Boost: /usr/include (found version "1.74.0") found components: filesystem program_options iostreams system thread regex chrono date_time atomic
 -- Found Boost: /usr/include (found version "1.74.0") found components: program_options filesystem system
 -- Configuring architecture: ice40
 -- Enabled iCE40 devices: 384;1k;5k;u4k;8k
--- Found Python3: /home/charlotte/.asdf/shims/python3 (found suitable version "3.11.4", minimum required is "3.5") found components: Interpreter
+-- Found Python3: /home/charlotte/.asdf/installs/python/3.11.4/bin/python3 (found suitable version "3.11.4", minimum required is "3.5") found components: Interpreter
 -- IceStorm install prefix: /home/charlotte/.local
 -- icebox data directory: /home/charlotte/.local/share/icebox
 -- Using iCE40 chipdb: /home/charlotte/nextpnr/ice40/chipdb
+-- Configuring architecture: ecp5
+-- Enabled ECP5 devices: 25k;45k;85k
+-- Trellis install prefix: /home/charlotte/.local
+-- Trellis library directory: /usr/local/lib/trellis
+-- Trellis data directory: /home/charlotte/.local/share/trellis
+-- Using ECP5 chipdb: /home/charlotte/nextpnr/ecp5/chipdb
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/charlotte/nextpnr
@@ -506,9 +587,6 @@ Install the project...
 -- Set runtime path of "/home/charlotte/.local/bin/nextpnr-ice40" to "/home/charlotte/.asdf/installs/python/3.11.4/lib"
 (venv) nextpnr $
 ```
-
-The `asdf` shim path for the Python executable is mentioned in the output, but
-it's OK—it's only used during build.
 
 Test the installed binary to make sure it works.
 
@@ -540,8 +618,6 @@ iCEBreaker. The board definitions we installed earlier can be executed directly
 to program a test blink gateware—doing this exercises the full toolchain.
 Verify:
 
-TODO: working output pls
-
 ```console?prompt=nextpnr%20$
 (venv) nextpnr $ python -m amaranth_boards.icebreaker
 init..
@@ -567,14 +643,16 @@ Bye.
 [ldso]: https://unix.stackexchange.com/a/22999/577154
 
 
-## SymbiYosys
+## <a href="#symbiyosys" aria-hidden="true" class="anchor" id="symbiyosys">🔗</a>SymbiYosys <a href="#scope" title="Back to scope">↩</a>
 
 [Formal verification] can be orchestrated with SymbiYosys. To get started with
 formal verification and Amaranth, have a look at [Robert Baruch's graded
 exercises for Amaranth HDL][amaranth-exercises], which start with formal methods
 from the very first exercise. They use the tools we install here.
 
-[SymbiYosys] is a relatively simple driver, so fetch the repo and install:
+[SymbiYosys] is a relatively simple frontend, so fetch the repo and install. It
+also has a Python dependency, `click`. Check that `sby -h` doesn't give an
+error:
 
 ```console?prompt=sby%20$
 (venv) sby $ make PREFIX=$HOME/.local install
@@ -584,47 +662,109 @@ cp sbysrc/sby_*.py /home/charlotte/.local/share/yosys/python3/
 sed -e 's|##yosys-program-prefix##|"''"|' < sbysrc/sby_core.py > /home/charlotte/.local/share/yosys/python3/sby_core.py
 sed 's|##yosys-sys-path##|sys.path += [os.path.dirname(__file__) + p for p in ["/share/python3", "/../share/yosys/python3"]]|;' < sbysrc/sby.py > /home/charlotte/.local/bin/sby
 chmod +x /home/charlotte/.local/bin/sby
+(venv) sby $ pip install click
+Collecting click
+  Using cached click-8.1.3-py3-none-any.whl (96 kB)
+Installing collected packages: click
+Successfully installed click-8.1.3
+(venv) sby $ sby -h
+usage: sby [options] [<jobname>.sby [tasknames] | <dirname>]
+
+positional arguments:
+  <jobname>.sby | <dirname>
+
+[... lots of output ...]
+
+  --init-config-file INIT_CONFIG_FILE
+                        create a default .sby config file
 (venv) sby $
 ```
 
-XXX install `click` with venv pip, check `sby -h`
-
+Check `sby -h` doesn't give an error.
 
 [amaranth-exercises]: https://github.com/RobertBaruch/amaranth-exercises
 
-## Z3
 
-TODO
+## <a href="#z3" aria-hidden="true" class="anchor" id="z3">🔗</a>Z3 <a href="#scope" title="Back to scope">↩</a>
+
+[Z3] is a [theorem prover] — it does the heavy lifting of formal verification.
+Clone the repo; we're going to follow the [CMake instructions].  The defaults
+are all good, except for the install prefix:
+
+```console
+(venv) z3 $ mkdir build
+(venv) z3 $ cd build
+(venv) build $ cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local
+-- The CXX compiler identification is GNU 12.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Z3 version 4.12.3.0
+
+[... lots of output ...]
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/charlotte/z3/build
+(venv) build $ make -j8
+[  0%] Building CXX object src/util/CMakeFiles/util.dir/approx_set.cpp.o
+[  0%] Building CXX object src/util/CMakeFiles/util.dir/approx_nat.cpp.o
+[  0%] Building CXX object src/util/CMakeFiles/util.dir/debug.cpp.o
+
+[... lots of output ...]
+
+[ 98%] Linking CXX shared library ../libz3.so
+[100%] Linking CXX executable ../../z3
+[100%] Built target shell
+[100%] Built target libz3
+(venv) build $ make install
+[  6%] Built target util
+[  8%] Built target params
+[  9%] Built target polynomial
+[  9%] Built target automata
+
+[... lots of output ...]
+
+-- Installing: /home/charlotte/.local/include/z3_spacer.h
+-- Installing: /home/charlotte/.local/include/z3_version.h
+-- Installing: /home/charlotte/.local/bin/z3
+(venv) build $
+```
+
+Done.
+
+[theorem prover]: https://en.wikipedia.org/wiki/Automated_theorem_proving
+[CMake instructions]: https://github.com/Z3Prover/z3/blob/master/README-CMake.md
 
 
+## Overview
 
-[^baby]: _baby's first gateware_, in fact.
+You're now ready to write and deploy gateware, with a toolchain selected, built
+and installed by yourself in a self-contained and repeatable way.
 
-[^windows]: * Lots of random things are a little bit broken.
-    * Building Yosys is certainly achievable but [you simply don't wanna][Yosys
-      on Windows].
-    * _Everything runs slower_. Everything. Git runs slower. Python runs slower.
-      Batch scripts run slower. Yosys runs slower. `iceprog` communicates
-      (much!) slower.
-    * Think you can fix some of this by using MSYS2 or Cygwin? Now you have two
-      problems.
+There are many ways to pivot from here.
 
-    There's more that I've decided was better left forgotten.
+##### You need a different Python version.  
+`asdf` and virtual environments make this easy.
 
-[Yosys on Windows]: https://github.com/YosysHQ/yosys/blob/2310a0ea9a61ed14d2769f01283a5a7590cbe558/guidelines/Windows
+##### You want to understand Amaranth better.
+You can modify your editable install directly, adding print debugging.
 
-[^wsl]: tl;dr: use your Linux user home directory, not your Windows user one;
-    when it comes time to flash your board, follow the guide to [Connect USB
-    devices] using [usbipd-win]. Don't mind the scary warning on the guide: I
-    didn't have to recompile my kernel even on Windows 10.
+##### You need to write pure Verilog.
+You can drive Yosys yourself.
 
-[^wslice]: You may also need to use [Zadig] — use the WinUSB
-    driver. You'll probably need to check "List All Devices" in the options
-    menu. You should see two entries that correspond to the iCEBreaker
-    "Interface 0" and "Interface 1", and they might identify themselves as the
-    iCEBreaker, or something less obvious ("RS2232 Interface"). Make sure you
-    use the same driver for both. When in doubt, unplug and replug.
+##### You want to understand decisions made by Yosys better.
+You can step-through debug Yosys: run your Amaranth build once, then invoke
+Yosys with your debugger of choice using the arguments from the generated
+`build/build_top.sh`.
 
-[Connect USB devices]: https://learn.microsoft.com/en-us/windows/wsl/connect-usb
-[usbipd-win]: https://github.com/dorssel/usbipd-win
-[Zadig]: https://zadig.akeo.ie/
+##### You need to target a different family of boards.
+nextpnr [supports][nextpnr README] a range of architectures.
+
+##### You want to use a different solver with SymbiYosys.
+If it's [supported][sby components] and on your `PATH`, it'll work.
+
+[nextpnr README]: https://github.com/YosysHQ/nextpnr#readme
+[sby components]: https://symbiyosys.readthedocs.io/en/latest/install.html#recommended-components

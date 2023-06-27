@@ -5,6 +5,9 @@
   font-family: Georgia, Palatino, serif;
 
   --border: #ccc;
+  --border-toc: #ccc;
+  --inline-code-border: #e0e0e0;
+  --inline-code-background: #f0f0f0;
 }
 
 body {
@@ -38,6 +41,24 @@ main h1 {
   line-height: 40px;
 
   letter-spacing: -1px;
+}
+
+main .anchor {
+  float: left;
+
+  visibility: hidden;
+
+  margin-left: -40px;
+
+  padding-right: 7px; /* so mouse can move from hx over */
+
+  line-height: 1;
+
+  vertical-align: middle;
+}
+
+main :hover > .anchor {
+  visibility: visible;
 }
 
 main .created-at {
@@ -85,12 +106,12 @@ main pre * {
   font-family: monospace;
 }
 
-main p code, main li code {
+main p code, main li > code {
   padding: 2px;
 
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--inline-code-border);
 
-  background-color: #f0f0f0;
+  background-color: var(--inline-code-background);
 
   font-family: monospace;
   font-size: 13px;
@@ -99,6 +120,10 @@ main p code, main li code {
 }
 
 main section.footnotes {
+  display: inline-block;
+
+  padding: 0px 10px;
+
   background-color: #f2fbff;
 }
 
@@ -163,6 +188,30 @@ footer a:hover {
   line-height: 20px;
 }
 
+#sidebar #toc {
+  position: sticky;
+  top: 20px;
+}
+
+#sidebar #toc ul ul {
+  margin: 8px 7px 8px 0;
+  padding: 0px 8px 0 0;
+  border-right: 2px solid var(--border-toc);
+}
+
+#sidebar #toc li {
+  font-size: 14px;
+
+  line-height: 20px;
+}
+
+#sidebar #toc p {
+  margin: 20px 0;
+
+  font-size: 14px;
+
+  line-height: 20px;
+}
 
 #footer-clear {
   clear: both;
@@ -189,10 +238,14 @@ footer {
     border-bottom: 1px solid var(--border);
   }
 
+  main section.footnotes {
+    margin-bottom: 40px;
+  }
+
   #sidebar {
     float: none;
 
-    width: calc(100% - 40px);
+    width: calc(100% - 60px);
 
     margin-top: 0px;
     margin-left: 60px;
@@ -221,6 +274,10 @@ footer {
     border-bottom: none;
   }
 
+  main :hover > .anchor {
+    visibility: hidden;
+  }  
+
   #sidebar {
     width: auto;
 
@@ -248,6 +305,9 @@ footer {
 @media (prefers-color-scheme: dark) {
   * {
     --border: #444;
+    --border-toc: #2a2a2a;
+    --inline-code-border: #303030;
+    --inline-code-background: #1f1f1f;
   }
 
   body {
@@ -259,13 +319,11 @@ footer {
     filter: brightness(1.8);
   }
 
-  main p code, main li code {
-    border: 1px solid #303030;
-
-    background-color: #1f1f1f;
-  }
-
   main section.footnotes {
     background-color: #0e1625;
+  }
+
+  #sidebar h2 {
+    color: #ccc;
   }
 }

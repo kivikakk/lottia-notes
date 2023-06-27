@@ -4,6 +4,7 @@ compile '/**/*.md' do
   filter :erb
   filter :commonmarker
   filter :colorize_syntax, default_colorizer: :rouge
+  filter :toc
   layout '/default.*'
 
   if item.identifier =~ '**/index.*'

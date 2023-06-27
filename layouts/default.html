@@ -12,7 +12,7 @@
     <% end %>
     <meta name="generator" content="Nanoc <%= Nanoc::VERSION %>">
   </head>
-  <body>
+  <body id="top">
     <main>
       <h1><%= @item[:title] %></h1>
       <% if created_at = @item[:created_at] %>
@@ -43,6 +43,30 @@
           <% end %>
         </ul>
       <% end %>
+
+      <% if toc %>
+        <div id="toc">
+          <h2>Table of contents</h2>
+
+          <ul>
+            <li>
+              <a href="#top">Top</a>
+              <% toc_walker do |event:, **details| %>
+                <% if event == :nest %>
+                  <ul><li>
+                <% elsif event == :unnest %>
+                  </li></ul>
+                <% elsif event == :item %>
+                  <% if !details[:first] %>
+                    </li><li>
+                  <% end %>
+                  <%= link_to details[:text], details[:href] %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </li>
+        </ul>
+      </div>
     </div>
     <div id="footer-clear"></div>
     <footer>

@@ -13,9 +13,9 @@ class CommonmarkerFilter < Nanoc::Filter
     @options ||= begin
       defaults = Commonmarker::Config::OPTIONS
       defaults.merge(
-        parse: defaults[:parse].merge(unsafe: true, smart: true),
-        render: defaults[:render].merge(hardbreaks: false, github_pre_lang: false),
-        extension: defaults[:extension].merge(footnotes: true),
+        parse: defaults[:parse].merge(smart: true),
+        render: defaults[:render].merge(unsafe: true, hardbreaks: false, github_pre_lang: false),
+        extension: defaults[:extension].merge(footnotes: true, header_ids: nil),
       )
     end
   end
