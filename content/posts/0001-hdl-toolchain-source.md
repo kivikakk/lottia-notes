@@ -412,15 +412,13 @@ make[1]: Leaving directory '/home/charlotte/icestorm/iceprog'
 If you have an iCEBreaker, at this stage you can try using `iceprog` just to say
 hi:
 
-TODO: check this output
-
 ```console
 (venv) icestorm $ iceprog -t
 init..
 cdone: high
 reset..
 cdone: low
-flash ID: 0xEF 0x40 0x16 0x00
+flash ID: 0xEF 0x40 0x18 0x00
 cdone: high
 Bye.
 (venv) icestorm $
@@ -429,7 +427,8 @@ Bye.
 The following error indicates the device wasn't found by `iceprog`:
 
 ```
-Can't find iCE FTDI USB device (vendor_id 0x0403, device_id 0x6010).
+init..
+Can't find iCE FTDI USB device (vendor_id 0x0403, device_id 0x6010 or 0x6014).
 ABORT.
 ```
 
@@ -586,7 +585,7 @@ chmod +x /home/charlotte/.local/bin/sby
 (venv) sby $
 ```
 
-XXX
+XXX install `click` with venv pip, check `sby -h`
 
 
 [amaranth-exercises]: https://github.com/RobertBaruch/amaranth-exercises
