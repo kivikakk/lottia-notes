@@ -15,6 +15,7 @@ GEM
     builder (3.2.4)
     colored (1.2)
     commonmarker (1.0.0.pre9-arm64-darwin)
+    commonmarker (1.0.0.pre9-x86_64-linux)
     concurrent-ruby (1.2.2)
     cri (2.15.11)
     ddmetrics (1.0.1)
@@ -74,6 +75,8 @@ GEM
       nanoc-core (~> 4.11, >= 4.11.14)
     nokogiri (1.15.2-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.15.2-x86_64-linux)
+      racc (~> 1.4)
     parallel (1.23.0)
     pastel (0.8.0)
       tty-color (~> 0.5)
@@ -108,6 +111,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   builder
