@@ -13,62 +13,67 @@
     <meta name="generator" content="Nanoc <%= Nanoc::VERSION %>">
   </head>
   <body id="top">
-    <main>
-      <h1><%= @item[:title] %></h1>
-      <% if created_at = @item[:created_at] %>
-        <p class="created-at"><%= created_at.strftime("%Y-%m-%d") %></p>
-      <% end %>
-      <%= yield %>
-    </main>
-    <div id="sidebar">
-      <ul>
-        <li><%= link_to "Home", @items["/index.*"] %></li>
-        <li><%= link_to "Author", "https://github.com/charlottia", rel: "me" %></li>
-      </ul>
-
-      <% if (items = sorted_articles.select { |item| !item[:draft] }).any? %>
-        <h2>Notes</h2>
-        <ul>
-          <% items.each do |item| %>
-            <li><%= link_to item[:title], item %></li>
-          <% end %>
-        </ul>
-      <% end %>
-
-      <% if (items = sorted_articles.select { |item| item[:draft] }).any? %>
-        <h2>Drafts</h2>
-        <ul>
-          <% items.each do |item| %>
-            <li><%= link_to item[:title], item %></li>
-          <% end %>
-        </ul>
-      <% end %>
-
-      <% if toc %>
-        <div id="toc">
-          <h2>Table of contents</h2>
-
+    <div class="flex">
+      <main>
+        <h1><%= @item[:title] %></h1>
+        <% if created_at = @item[:created_at] %>
+          <p class="created-at"><%= created_at.strftime("%Y-%m-%d") %></p>
+        <% end %>
+        <%= yield %>
+      </main>
+      <div class="sidebar">
+        <div class="sidebar-inner">
           <ul>
-            <li>
-              <a href="#top">Top</a>
-              <% toc_walker do |event:, **details| %>
-                <% if event == :nest %>
-                  <ul><li>
-                <% elsif event == :unnest %>
-                  </li></ul>
-                <% elsif event == :item %>
-                  <% if !details[:first] %>
-                    </li><li>
-                  <% end %>
-                  <%= link_to details[:text], details[:href] %>
-                <% end %>
+            <li><%= link_to "Home", @items["/index.*"] %></li>
+            <li><%= link_to "Author", "https://github.com/charlottia", rel: "me" %></li>
+          </ul>
+
+          <% if (items = sorted_articles.select { |item| !item[:draft] }).any? %>
+            <h2>Notes</h2>
+            <ul>
+              <% items.each do |item| %>
+                <li><%= link_to item[:title], item %></li>
               <% end %>
-            <% end %>
-          </li>
-        </ul>
+            </ul>
+          <% end %>
+
+          <% if (items = sorted_articles.select { |item| item[:draft] }).any? %>
+            <h2>Drafts</h2>
+            <ul>
+              <% items.each do |item| %>
+                <li><%= link_to item[:title], item %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        </div>
+
+        <% if toc %>
+          <div class="toc">
+            <div class="toc-inner">
+              <h2>Table of contents</h2>
+
+              <ul>
+                <li>
+                  <a href="#top">Top</a>
+                  <% toc_walker do |event:, **details| %>
+                    <% if event == :nest %>
+                      <ul><li>
+                    <% elsif event == :unnest %>
+                      </li></ul>
+                    <% elsif event == :item %>
+                      <% if !details[:first] %>
+                        </li><li>
+                      <% end %>
+                      <%= link_to details[:text], details[:href] %>
+                    <% end %>
+                  <% end %>
+                </li>
+              </ul>
+            </div>
+          </div>
+        <% end %>
       </div>
     </div>
-    <div id="footer-clear"></div>
     <footer>
       <p>
         Licensed under the <a
@@ -76,5 +81,6 @@
         by its author.
       </p>
     </footer>
+    <script src="/toc-highlight.js"></script>
   </body>
 </html>

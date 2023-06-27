@@ -4,22 +4,33 @@ require 'nokogiri'
 class TocFilter < Nanoc::Filter
   identifier :toc
 
+  @@current_toc = nil
+
   def self.current_toc(item)
     @@current_toc&.[](item)
   end
 
   def run(content, params={})
-    doc = Nokogiri::HTML(content)
+    doc = Nokogiri::HTML5.fragment(content)
+
+    if footnotes = doc.css("section.footnotes")[0]
+      footnotes[:id] = "footnotes"
+      h2 = footnotes.prepend_child("<h2>")[0]
+      h2.inner_html = "Footnotes"
+    end
 
     toc = []
     levels = []
 
-    (doc/"h1, h2, h3, h4").each do |header|
-      CollectTextAndIdVisitor.new.tap { |visitor| header.accept(visitor) } => {text:, id:}
-      next if text.empty? || id.nil?
+    seen_ids = Set.new(["top"])
+    back_to_top = item[:back_to_top] || "top"
+
+    doc.css("h1, h2, h3, h4, h5, h6").each do |header|
+      id = header.parent[:id]
+      text = header.accept(CollectTextVisitor.new)
+      next if id.nil? || text.empty? || seen_ids.include?(id)
 
       level = header.name[1].to_i
-      level += 1 if rand > 0.5
       while levels[-1] != level
         if levels.empty? || level > levels[-1]
           levels << level
@@ -29,36 +40,48 @@ class TocFilter < Nanoc::Filter
       end
 
       toc << {text:, href: "##{id}", depth: levels.length}
-    end
 
-    @@current_toc = {item => toc}
+      permalink = header.add_child(" <a>")[1]
+      permalink[:href] = "##{id}"
+      permalink[:"aria-hidden"] = true
+      permalink[:title] = "Permalink to section"
+      permalink[:class] = "anchor"
+      permalink.inner_html = "🔗"
 
-    content
-  end
-
-  class CollectTextAndIdVisitor
-    def initialize
-      @text = +""
-      @id = nil
-    end
-
-    def visit(node)
-      if node[:id]
-        raise "multiple ids found" if !@id.nil?
-        @id = node[:id]
+      if seen_ids.include?(back_to_top)
+        backlink = header.add_child(" <a>")[1]
+        backlink[:href] = "##{back_to_top}"
+        backlink[:"aria-hidden"] = true
+        backlink[:title] = "Back to #{back_to_top}"
+        backlink[:class] = "anchor"
+        backlink.inner_html = "↩"
       end
 
+      seen_ids << id
+    end
+
+    if toc.any?
+      @@current_toc = {item => toc}
+    end
+
+    doc.to_s
+  end
+
+  class CollectTextVisitor
+    def initialize
+      @text = +""
+    end
+
+    def visit(node, root: true)
       if node.text?
         @text << node.text
       elsif node.name == "a"
         # pass
       else
-        node.children.each { |child| visit(child) }
+        node.children.each { |child| visit(child, root: false) }
       end
-    end
 
-    def deconstruct_keys(_keys)
-      {text: @text.strip.freeze, id: @id.freeze}
+      @text.strip.freeze if root
     end
   end
 end
@@ -71,7 +94,7 @@ module TocHelper
   def toc_walker(&blk)
     toc = self.toc
 
-    current_depth = 0
+    current_depth = 1
     toc.each do |entry|
       entry => depth:, text:, href:
 
@@ -91,7 +114,7 @@ module TocHelper
       blk.(event: :item, text:, href:, first:)
     end
 
-    while current_depth > 0
+    while current_depth > 1
       blk.(event: :unnest)
       current_depth -= 1
     end

@@ -6,6 +6,8 @@
 
   --border: #ccc;
   --border-toc: #ccc;
+  --sidebar-link: #f30;
+  --toc-link-active: #000;
   --inline-code-border: #e0e0e0;
   --inline-code-background: #f0f0f0;
 }
@@ -13,6 +15,12 @@
 body {
   background: #fff;
   max-width: 880px;
+}
+
+.flex {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
 }
 
 a:link,
@@ -25,8 +33,6 @@ a:hover {
 }
 
 main {
-  float: right;
-
   width: 540px;
 
   margin-top: 40px;
@@ -44,17 +50,9 @@ main h1 {
 }
 
 main .anchor {
-  float: left;
-
   visibility: hidden;
 
-  margin-left: -40px;
-
-  padding-right: 7px; /* so mouse can move from hx over */
-
   line-height: 1;
-
-  vertical-align: middle;
 }
 
 main :hover > .anchor {
@@ -127,23 +125,30 @@ main section.footnotes {
   background-color: #f2fbff;
 }
 
-#sidebar {
-  float: right;
+main section.footnotes h2 {
+  padding-top: 15px;
+}
 
+.sidebar {
   margin-top: 40px;
-  margin-left: 20px;
   margin-bottom: 40px;
+  margin-left: 20px;
 
   width: 200px;
 
-  padding: 20px 20px 0 0;
-
-  border-right: 1px solid var(--border);
+  padding: 20px 0px 0 0;
 
   text-align: right;
 }
 
-#sidebar h2 {
+.sidebar-inner {
+  padding-right: 20px;
+  padding-bottom: 1px;
+
+  border-right: 1px solid var(--border);
+}
+
+.sidebar h2 {
   text-transform: uppercase;
 
   font-size: 13px;
@@ -155,32 +160,32 @@ main section.footnotes {
   line-height: 20px;
 }
 
-#sidebar a:link,
-#sidebar a:visited,
+.sidebar a:link,
+.sidebar a:visited,
 footer a:link,
 footer a:visited {
-  color: #f30;
+  color: var(--sidebar-link);
   text-decoration: none;
 }
 
-#sidebar a:hover,
+.sidebar a:hover,
 footer a:hover {
   color: #f90;
 }
 
-#sidebar ul {
+.sidebar ul {
   list-style-type: none;
 
   margin: 20px 0;
 }
 
-#sidebar li {
+.sidebar li {
   font-size: 14px;
 
   line-height: 20px;
 }
 
-#sidebar p {
+.sidebar p {
   margin: 20px 0;
 
   font-size: 14px;
@@ -188,33 +193,28 @@ footer a:hover {
   line-height: 20px;
 }
 
-#sidebar #toc {
+.sidebar .toc {
   position: sticky;
   top: 20px;
 }
 
-#sidebar #toc ul ul {
+.sidebar .toc-inner {
+  padding-right: 20px;
+
+  border-right: 1px solid var(--border);
+}
+
+.sidebar .toc ul ul {
   margin: 8px 7px 8px 0;
-  padding: 0px 8px 0 0;
+
+  padding: 0 12px 0 0;
+
   border-right: 2px solid var(--border-toc);
 }
 
-#sidebar #toc li {
-  font-size: 14px;
-
-  line-height: 20px;
-}
-
-#sidebar #toc p {
-  margin: 20px 0;
-
-  font-size: 14px;
-
-  line-height: 20px;
-}
-
-#footer-clear {
-  clear: both;
+.sidebar .toc li.active > a:link,
+.sidebar .toc li.active > a:visited {
+  color: var(--toc-link-active);
 }
 
 footer {
@@ -232,9 +232,11 @@ footer {
 }
 
 @media screen and (max-width: 880px) {
-  main {
-    float: none;
+  .flex {
+    display: block;
+  }
 
+  main {
     border-bottom: 1px solid var(--border);
   }
 
@@ -242,19 +244,40 @@ footer {
     margin-bottom: 40px;
   }
 
-  #sidebar {
-    float: none;
-
+  .sidebar {
     width: calc(100% - 60px);
 
     margin-top: 0px;
     margin-left: 60px;
 
+    text-align: left;
+  }
+
+  .sidebar-inner {
+    padding-right: 0px;
+    padding-bottom: 0px;
+
+    border-right: none;
+  }
+
+  .sidebar .toc-inner {
     padding-right: 0px;
 
     border-right: none;
+  }
 
-    text-align: left;
+  .sidebar .toc ul ul {
+    margin: 8px 0 8px 7px;
+
+    padding: 0 0 0 12px;
+
+    border-left: 2px solid var(--border-toc);
+    border-right: none;
+  }
+
+  .sidebar .toc li.active > a:link,
+  .sidebar .toc li.active > a:visited {
+    color: var(--sidebar-link);
   }
 
   footer {
@@ -276,9 +299,9 @@ footer {
 
   main :hover > .anchor {
     visibility: hidden;
-  }  
+  }
 
-  #sidebar {
+  .sidebar {
     width: auto;
 
     margin-left: 3em;
@@ -306,6 +329,7 @@ footer {
   * {
     --border: #444;
     --border-toc: #2a2a2a;
+    --toc-link-active: #fff;
     --inline-code-border: #303030;
     --inline-code-background: #1f1f1f;
   }
@@ -323,7 +347,7 @@ footer {
     background-color: #0e1625;
   }
 
-  #sidebar h2 {
+  .sidebar h2 {
     color: #ccc;
   }
 }

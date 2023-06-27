@@ -2,8 +2,11 @@
 title: Installing an HDL toolchain from source
 created_at: 2023-06-27T00:01:00+1000
 kind: article
+back_to_top: scope
 draft: true
 ---
+
+<section id="opening">
 
 It occurred to me while writing up [§ Requirements][requirements] in the README
 for some[^baby] gateware that getting the whole beginner's open-source FPGA
@@ -30,17 +33,20 @@ environments, so I'm describing it for posterity/others.
 
 [^baby]: _baby's first gateware_, in fact.
 
+</section>
 
-## <a href="#scope" aria-hidden="true" class="anchor" id="scope">🔗</a>Scope
+<section id="scope">
 
-By the end of this guide, you'll have the following ready to go: 
+## Scope
 
-* [Git] ([↴](#git))
-* [Python 3] ([↴](#python-3))
-* [Amaranth] ([↴](#amaranth))
-* [Yosys] ([↴](#yosys))
-* [nextpnr] ([↴](#nextpnr)) with [Project IceStorm] ([↴](#project-icestorm))
-* [SymbiYosys] ([↴](#symbiyosys)) and [Z3] ([↴](#z3))
+By the end of this guide, you'll have the following ready to go:
+
+* [Git]
+* [Python 3]
+* [Amaranth]
+* [Yosys]
+* [nextpnr] with [Project IceStorm]
+* [SymbiYosys] and [Z3]
 
 [Git]: https://git-scm.com/
 [Python 3]: https://www.python.org
@@ -50,8 +56,6 @@ By the end of this guide, you'll have the following ready to go:
 [Project IceStorm]: https://github.com/YosysHQ/icestorm
 [SymbiYosys]: https://github.com/YosysHQ/sby
 [Z3]: https://github.com/Z3Prover/z3
-
-(Click ↴ to jump to that section of the guide.)
 
 [Git] is for acquiring source code.
 
@@ -126,16 +130,22 @@ multiple versions around.
 [Connect USB devices]: https://learn.microsoft.com/en-us/windows/wsl/connect-usb
 [usbipd-win]: https://github.com/dorssel/usbipd-win
 
+</section>
 
-## <a href="#git" aria-hidden="true" class="anchor" id="git">🔗</a>Git <a href="#scope" title="Back to scope">↩</a>
+<section id="git">
+
+## Git
 
 The [Git] website's [Downloads][Git downloads] page has instructions for
 acquiring it through your relevant package manager.
 
 [Git downloads]: https://git-scm.com/downloads
 
+</section>
 
-## <a href="#python-3" aria-hidden="true" class="anchor" id="python-3">🔗</a>Python 3 <a href="#scope" title="Back to scope">↩</a>
+<section id="python-3">
+
+## Python 3
 
 That was easy. Now the opinions start.
 
@@ -172,9 +182,9 @@ Installed Python-3.11.4 to /home/charlotte/.asdf/installs/python/3.11.4
 There's also 3.12.0b3 available at time of writing, if you don't mind a beta.)
 
 The last command makes it the default Python for our user. `asdf` puts some
-shims in our `PATH` which use a combination of our configured defaults (`global`),
-our current path (`local`), and environment variables (`shell`) to select the
-desired version:
+shims in our `PATH` which use a combination of our configured defaults
+(`global`), our current path (`local`), and environment variables (`shell`) to
+select the desired version:
 
 ```console?prompt=$,>>>
 ~ $ which python
@@ -194,6 +204,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 [asdf]: https://asdf-vm.com/
 [asdf getting started]: https://asdf-vm.com/guide/getting-started.html
 
+</section>
+
+<section id="venv">
 
 ### venv
 
@@ -234,7 +247,11 @@ We're ready to install Python dependencies.
 
 [virtual environment]: https://docs.python.org/3/library/venv.html
 
-## <a href="#amaranth" aria-hidden="true" class="anchor" id="amaranth">🔗</a>Amaranth <a href="#scope" title="Back to scope">↩</a>
+</section>
+
+<section id="amaranth">
+
+## Amaranth
 
 Firstly, note Amaranth's own [installation instructions][Amaranth installation
 instructions]. We'll follow along, and deviate from them somewhat.
@@ -338,8 +355,11 @@ Type "help", "copyright", "credits" or "license" for more information.
 [Amaranth installation instructions]: https://amaranth-lang.org/docs/amaranth/latest/install.html
 [amaranth-boards]: https://github.com/amaranth-lang/amaranth-boards
 
+</section>
 
-## <a href="#yosys" aria-hidden="true" class="anchor" id="yosys">🔗</a>Yosys <a href="#scope" title="Back to scope">↩</a>
+<section id="yosys">
+
+## Yosys
 
 Clone the [Yosys repo] and read its README. [§ Building from Source] tells you
 which packages from the package manager it needs.
@@ -390,14 +410,17 @@ Check the `yosys-config` output:
 ```console
 (venv) yosys $ yosys-config --datdir
 /home/charlotte/.local/share/yosys
-(venv) yosys $ 
+(venv) yosys $
 ```
 
 [Yosys repo]: https://github.com/yosyshq/yosys
 [§ Building from Source]: https://github.com/yosyshq/yosys#building-from-source
 
+</section>
 
-## <a href="#project-icestorm" aria-hidden="true" class="anchor" id="project-icestorm">🔗</a>Project IceStorm <a href="#scope" title="Back to scope">↩</a>
+<section id="project-icestorm">
+
+## Project IceStorm
 
 Before [nextpnr], we need the technology-specific support. That's this step.
 
@@ -456,6 +479,9 @@ Bye.
 (venv) icestorm $
 ```
 
+</section>
+
+<section id="troubleshooting">
 
 ### Troubleshooting
 
@@ -502,7 +528,7 @@ footnote[^wslice].
 
 [^wslice]: Firstly, create (or edit) the file `/etc/wsl.conf` and ensure you
     have the following stanza (or know what you're doing already):
-    
+
     ```ini
     [boot]
     command="service udev restart"
@@ -521,8 +547,11 @@ footnote[^wslice].
 
 [Zadig]: https://zadig.akeo.ie/
 
+</section>
 
-## <a href="#nextpnr" aria-hidden="true" class="anchor" id="nextpnr">🔗</a>nextpnr <a href="#scope" title="Back to scope">↩</a>
+<section id="nextpnr">
+
+## nextpnr
 
 Ensure Project IceStorm ([↴](#project-icestorm)) is installed first.
 
@@ -642,8 +671,11 @@ Bye.
 [rpath]: https://duerrenberger.dev/blog/2021/08/04/understanding-rpath-with-cmake/
 [ldso]: https://unix.stackexchange.com/a/22999/577154
 
+</section>
 
-## <a href="#symbiyosys" aria-hidden="true" class="anchor" id="symbiyosys">🔗</a>SymbiYosys <a href="#scope" title="Back to scope">↩</a>
+<section id="symbiyosys">
+
+## SymbiYosys
 
 [Formal verification] can be orchestrated with SymbiYosys. To get started with
 formal verification and Amaranth, have a look at [Robert Baruch's graded
@@ -684,8 +716,11 @@ Check `sby -h` doesn't give an error.
 
 [amaranth-exercises]: https://github.com/RobertBaruch/amaranth-exercises
 
+</section>
 
-## <a href="#z3" aria-hidden="true" class="anchor" id="z3">🔗</a>Z3 <a href="#scope" title="Back to scope">↩</a>
+<section id="z3">
+
+## Z3
 
 [Z3] is a [theorem prover] — it does the heavy lifting of formal verification.
 Clone the repo; we're going to follow the [CMake instructions].  The defaults
@@ -738,6 +773,9 @@ Done.
 [theorem prover]: https://en.wikipedia.org/wiki/Automated_theorem_proving
 [CMake instructions]: https://github.com/Z3Prover/z3/blob/master/README-CMake.md
 
+</section>
+
+<section id="overview">
 
 ## Overview
 
@@ -746,7 +784,7 @@ and installed by yourself in a self-contained and repeatable way.
 
 There are many ways to pivot from here.
 
-##### You need a different Python version.  
+##### You need a different Python version.
 `asdf` and virtual environments make this easy.
 
 ##### You want to understand Amaranth better.
@@ -768,3 +806,5 @@ If it's [supported][sby components] and on your `PATH`, it'll work.
 
 [nextpnr README]: https://github.com/YosysHQ/nextpnr#readme
 [sby components]: https://symbiyosys.readthedocs.io/en/latest/install.html#recommended-components
+
+</section>
