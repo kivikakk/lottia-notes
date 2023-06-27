@@ -24,7 +24,8 @@
       <div class="sidebar">
         <div class="sidebar-inner">
           <ul>
-            <li><%= link_to "Home", @items["/index.*"] %></li>
+            <% home = @items["/index.*"] %>
+            <li class="<%= item == home ? "active" : "" %>"><%= link_to "Home", home %></li>
             <li><%= link_to "Author", "https://github.com/charlottia", rel: "me" %></li>
           </ul>
 
@@ -32,7 +33,7 @@
             <h2>Notes</h2>
             <ul>
               <% items.each do |item| %>
-                <li><%= link_to item[:title], item %></li>
+                <li class="<%= item == @item ? "active" : "" %>"><%= link_to item[:title], item %></li>
               <% end %>
             </ul>
           <% end %>
@@ -41,7 +42,7 @@
             <h2>Drafts</h2>
             <ul>
               <% items.each do |item| %>
-                <li><%= link_to item[:title], item %></li>
+                <li class="<%= item == @item ? "active" : "" %>"><%= link_to item[:title], item %></li>
               <% end %>
             </ul>
           <% end %>
