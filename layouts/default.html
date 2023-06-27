@@ -1,8 +1,14 @@
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
+    <% home = @items["/index.*"] %>
+    <% is_home = item == home %>
     <meta charset="utf-8">
-    <title><%= @item[:title] %> - <%= @config[:title] %></title>
+    <% if is_home %>
+      <title><%= @config[:title] %></title>
+    <% else %>
+      <title><%= @item[:title] %> - <%= @config[:title] %></title>
+    <% end %>
     <meta name="author" content="Charlotte">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/stylesheet.css">
@@ -25,8 +31,7 @@
       <div class="sidebar">
         <div class="sidebar-inner">
           <ul>
-            <% home = @items["/index.*"] %>
-            <li class="<%= item == home ? "active" : "" %>"><%= link_to "Home", home %></li>
+            <li class="<%= is_home ? "active" : "" %>"><%= link_to "Home", home %></li>
             <li><%= link_to "Author", "https://github.com/charlottia", rel: "me" %></li>
           </ul>
 
