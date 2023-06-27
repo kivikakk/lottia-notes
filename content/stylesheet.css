@@ -80,8 +80,9 @@ main p sup {
 }
 
 main ul, main ol {
-  margin: 20px;
-  margin-right: 0px;
+  margin: 20px 0;
+
+  padding-left: 20px;
 }
 
 main li {
