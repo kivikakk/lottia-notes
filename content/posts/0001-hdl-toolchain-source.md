@@ -545,20 +545,19 @@ TODO: working output pls
 ```console?prompt=nextpnr%20$
 (venv) nextpnr $ python -m amaranth_boards.icebreaker
 init..
-Can't find iCE FTDI USB device (vendor_id 0x0403, device_id 0x6010 or 0x6014).
-ABORT.
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "/home/charlotte/amaranth-boards/amaranth_boards/icebreaker.py", line 75, in <module>
-    p.build(Blinky(), do_program=True)
-  File "/home/charlotte/amaranth/amaranth/build/plat.py", line 113, in build
-    self.toolchain_program(products, name, **(program_opts or {}))
-  File "/home/charlotte/amaranth-boards/amaranth_boards/icebreaker.py", line 68, in toolchain_program
-    subprocess.check_call([iceprog, bitstream_filename])
-  File "/home/charlotte/.asdf/installs/python/3.11.4/lib/python3.11/subprocess.py", line 413, in check_call
-    raise CalledProcessError(retcode, cmd)
-subprocess.CalledProcessError: Command '['iceprog', '/tmp/amaranth_l7n0foy0_top.bin']' returned non-zero exit status 2.
+cdone: high
+reset..
+cdone: low
+flash ID: 0xEF 0x40 0x18 0x00
+file size: 104090
+erase 64kB sector at 0x000000..
+erase 64kB sector at 0x010000..
+programming..
+done.
+reading..
+VERIFY OK
+cdone: high
+Bye.
 (venv) nextpnr $
 ```
 
