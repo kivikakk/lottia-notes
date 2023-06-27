@@ -1,5 +1,6 @@
-require 'nokogiri'
+# frozen_string_literal: true
 
+require 'nokogiri'
 
 class TocFilter < Nanoc::Filter
   identifier :toc

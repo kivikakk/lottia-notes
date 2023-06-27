@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/stylesheet.css">
     <link rel="stylesheet" href="/syntax.css">
 
-    <% if articles.select { |i| !i[:draft] }.any? %>
+    <% if articles.any? { |i| !i[:draft] } %>
       <link href="/atom.xml" rel="alternate" title="<%= @config[:title] %>" type="application/atom+xml">
     <% end %>
     <meta name="generator" content="Nanoc <%= Nanoc::VERSION %>">
