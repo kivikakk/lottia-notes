@@ -97,7 +97,7 @@ multiple versions around.
 [Verilog]: https://en.wikipedia.org/wiki/Verilog
 [VHDL]: https://en.wikipedia.org/wiki/VHDL
 [Yosys manual]: https://yosys.readthedocs.io/_/downloads/en/latest/pdf/
-[portable Yosys]: https://yowasp.org/
+[portable Yosys]: https://pypi.org/project/amaranth-yosys/
 [iCE40]: https://en.wikipedia.org/wiki/ICE_(FPGA)#iCE40_(40_nm)
 [iCEBreaker]: https://1bitsquared.com/products/icebreaker
 [iCEBreaker on Crowd Supply]: https://www.crowdsupply.com/1bitsquared/icebreaker-fpga
