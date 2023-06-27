@@ -3,6 +3,8 @@
   padding: 0;
 
   font-family: Georgia, Palatino, serif;
+
+  --border: #ccc;
 }
 
 body {
@@ -87,11 +89,13 @@ main p code, main li code {
   padding: 2px;
 
   border: 1px solid #e0e0e0;
-  
+
   background-color: #f0f0f0;
-  
+
   font-family: monospace;
   font-size: 13px;
+
+  white-space: nowrap;
 }
 
 main section.footnotes {
@@ -109,7 +113,7 @@ main section.footnotes {
 
   padding: 20px 20px 0 0;
 
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--border);
 
   text-align: right;
 }
@@ -173,7 +177,7 @@ footer {
   padding-top: 20px;
   padding-bottom: 40px;
 
-  border-top: 1px solid #ccc;
+  border-top: 1px solid var(--border);
 
   text-align: center;
 }
@@ -182,7 +186,7 @@ footer {
   main {
     float: none;
 
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--border);
   }
 
   #sidebar {
@@ -225,8 +229,8 @@ footer {
 
     padding-bottom: 20px;
 
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
 
   footer {
@@ -238,5 +242,30 @@ footer {
     padding-top: 0;
 
     border-top: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  * {
+    --border: #444;
+  }
+
+  body {
+    background: #0e1117;
+    color: #e7edf4;
+  }
+
+  a {
+    filter: brightness(1.8);
+  }
+
+  main p code, main li code {
+    border: 1px solid #303030;
+
+    background-color: #1f1f1f;
+  }
+
+  main section.footnotes {
+    background-color: #0e1625;
   }
 }

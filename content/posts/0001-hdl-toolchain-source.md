@@ -53,7 +53,7 @@ By the end of this guide, you'll have the following ready to go:
 
 [Python 3] is for using Amaranth.
 
-[Amaranth] is the [HDL] I'm using. It is a Python library which contains a
+[Amaranth] is the [HDL] I'm using. It is a Python library which consists of a
 language for describing digital logic, as well as facilitating simulation and
 building of the resulting designs. It integrates well with the ecosystem, and
 permits intermixing with [Verilog] (or [VHDL]). At time of writing, its
@@ -223,7 +223,8 @@ We do not pass `--user` to `pip`—it is rejected in a virtual environment, for
 environment.
 
 We're going to skip the latest release and go straight to an editable
-development snapshot. You may want to clone it within your project directory, perhaps as a Git submodule, or along-side. I'm going with along-side.
+development snapshot. You may want to clone it within your project directory,
+perhaps as a Git submodule, or along-side. I'm going with along-side.
 
 Clone Amaranth and install it in editable mode, with the built-in Yosys:
 
@@ -456,7 +457,9 @@ the specific instructions for [nextpnr-ice40]. We'll need to adapt them
 slightly.
 
 We specify the iCE40 arch, the install prefix, the install prefix for Project
-IceStorm, and finally, a [runtime search path][rpath] to add to the final binary.  This is because nextpnr will link against our Python install, but our Python install's shared libraries aren't on the [system search path][ldso].
+IceStorm, and finally, a [runtime search path][rpath] to add to the final
+binary.  This is because nextpnr will link against our Python install, but our
+Python install's shared libraries aren't on the [system search path][ldso].
 
 
 ```console?prompt=nextpnr%20$,%20%20%20%20
