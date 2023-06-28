@@ -96,7 +96,7 @@ main ul li {
 }
 
 main pre {
-  overflow-x: scroll;
+  overflow-x: auto;
 
   margin-bottom: 20px;
 
