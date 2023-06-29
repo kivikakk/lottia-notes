@@ -311,6 +311,11 @@ the data from the address we set two cycles ago; every cycle the memory is
 seeing the address we gave one cycle ago; every cycle we increment the address
 to keep it going.
 
+(My wording here muddles up the timing of when we "set" a given value quite a
+lot — really, we _initiate_ the setting of the address two cycles ago, which one
+cycle ago _is_ set (and seen), which this cycle we then see the data returned
+of.)
+
 This is pretty theoretical in this form, but I have a few state machines that do
 this kind of sliding continuous read in a limited fashion.
 
