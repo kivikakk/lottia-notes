@@ -349,14 +349,14 @@ will change to `rom_bus.addr >> 1` as soon as a change on `rom_bus.addr` is
 registered — there isn't an additional cycle between the requested 8-bit address
 on the ROM bus changing and the read port's 16-bit address changing:
 
-| cycle |    statement issued | <nobr>ROM bus</nobr> addr | <nobr>read port</nobr> addr | <nobr>read port</nobr> data |
-| ----: | ------------------: | -----------: | -------------: | -------------: |
-| 0     | `rom_rd.addr.eq(0)` |          _x_ |            _x_ |            _x_ |
-| 1     | `rom_rd.addr.eq(1)` |          `0` |            `0` |            _x_ |
-| 2     | `rom_rd.addr.eq(2)` |          `1` |            `0` |       `0x2211` |
-| 3     | `rom_rd.addr.eq(3)` |          `2` |            `1` |       `0x2211` |
-| 4     | `rom_rd.addr.eq(4)` |          `3` |            `1` |       `0x4433` |
-| 5     | `rom_rd.addr.eq(5)` |          `4` |            `2` |       `0x4433` |
+| cycle |     statement issued | <nobr>ROM bus</nobr> addr | <nobr>read port</nobr> addr | <nobr>read port</nobr> data |
+| ----: | -------------------: | -----------: | -------------: | -------------: |
+| 0     | `rom_bus.addr.eq(0)` |          _x_ |            _x_ |            _x_ |
+| 1     | `rom_bus.addr.eq(1)` |          `0` |            `0` |            _x_ |
+| 2     | `rom_bus.addr.eq(2)` |          `1` |            `0` |       `0x2211` |
+| 3     | `rom_bus.addr.eq(3)` |          `2` |            `1` |       `0x2211` |
+| 4     | `rom_bus.addr.eq(4)` |          `3` |            `1` |       `0x4433` |
+| 5     | `rom_bus.addr.eq(5)` |          `4` |            `2` |       `0x4433` |
 
 Similarly, the ROM bus data port will be updated as soon as the read port's data
 port (`rom_rd.data`) changes.
