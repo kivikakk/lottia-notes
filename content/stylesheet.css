@@ -12,6 +12,9 @@
   --inline-code-background: #f0f0f0;
   --footnotes-background: #f2fbff;
   --footnotes-highlight: #929bbf;
+  --table-background: #e2ebef;
+  --table-background-head: #c2ebef;
+  --table-background-zebra: #f2fbff;
 }
 
 body {
@@ -107,7 +110,7 @@ main pre * {
   font-family: monospace;
 }
 
-main p code, main li > code {
+main p code, main li > code, main table code {
   padding: 2px;
 
   border: 1px solid var(--inline-code-border);
@@ -118,6 +121,38 @@ main p code, main li > code {
   font-size: 13px;
 
   white-space: nowrap;
+}
+
+main table {
+  table-layout: fixed;
+  
+  border-collapse: collapse;
+
+  background-color: var(--table-background);
+}
+
+main table th {
+  padding: 0.2em 0.5em;
+}
+
+main table td {
+  padding: 0.2em 0.5em;
+}
+
+main table tbody tr:nth-child(odd) {
+  background-color: var(--table-background-zebra);
+}
+
+main table thead tr {
+  background-color: var(--table-background-head);
+}
+
+main table code {
+  padding: 0;
+
+  border: none;
+
+  background: none;
 }
 
 main section.footnotes {
@@ -355,6 +390,9 @@ footer {
     --inline-code-background: #1f1f1f;
     --footnotes-background: #0e1625;
     --footnotes-highlight: #6e76a5;
+    --table-background: #0e1625;
+    --table-background-head: #0e2b45;
+    --table-background-zebra: #0e1b35;
   }
 
   body {

@@ -1,12 +1,12 @@
 ---
 title: Untangling cycles
-created_at: 2023-06-28T18:51:00+1000
+created_at: 2023-06-29T10:51:00+1000
 kind: article
-draft: true
 ---
 
-* TODO: smart quotes and *n*+2 *n*'+1 *n*''+0 are iffy
-* TODO: non-non sequitur opening
+This is straight from my journal, so it starts without warning.
+
+---
 
 The bit packing is turning out to be surprisingly tricky!
 
@@ -21,7 +21,7 @@ same.
 
 This post is literate Python. Why not. We have the following as baseline:
 
-```python
+```python literate
 import math
 from typing import Optional
 
@@ -66,7 +66,7 @@ It'd be nice to add a translation layer that transparently forwarded reads and
 writes from an 8-bit addressable space into the 16-bit words. Even bytes in the
 lower halves, odd bytes in the upper halves. Here's what that'd look like:
 
-```python
+```python literate
 ROM_CONTENT_PACKED = [0x2211, 0x4433, 0x6655, 0x8877]
 ROM_LENGTH = 8
 ```
@@ -75,9 +75,9 @@ The length of the ROM that all the downstream consumers care about is the 8-bit
 addressable one—address 0 has `0x11`, address 1 `0x22`, etc. The fact that we
 have 8 bytes packed into 4 words of 16 bits is irrelevant to them.
 
-Here's where our `Example` will play out:
+Here's where our example will play out:
 
-```python
+```python literate
 class Example(Elaboratable):
     def __init__(self):
         self.downstream = Downstream()
@@ -98,7 +98,7 @@ We now need to do the following things:
       sure suffered!)
 * Get the `ReadPort` for our RAM. I'm asserting the lengths here illustratively for the reader's benefit.
 
-```python
+```python literate
         packed_size = math.ceil(ROM_LENGTH / 2)
         rom_mem = Memory(
             width=16,
@@ -125,7 +125,7 @@ so, given a made-up `mem[x]` operator, the following timeline applies:
 Now we'll create our `ROMBus`. This is what all the RTL I had was already
 using—it was connected directly to the read port of the 8-wide memory.
 
-```python
+```python literate
         rom_bus = ROMBus(range(ROM_LENGTH), 8)
         assert len(rom_bus.addr) == 3
         assert len(rom_bus.data) == 8
@@ -135,7 +135,7 @@ We're going to put the actual translation logic and state machine in separate
 functions, so they can be changed later while preserving the literacy of this
 post. _Why not_.
 
-```python
+```python literate
         self.translation(m, rom_rd, rom_bus)
         self.fsm(m, rom_bus)
 
@@ -145,7 +145,7 @@ post. _Why not_.
 We want to hook up the ROM bus to the memory in a transparent fashion. Here's
 what I started with:
 
-```python
+```python literate
     def translation(self, m: Module, rom_rd: ReadPort, rom_bus: ROMBus):
         m.d.comb += [
             rom_rd.addr.eq(rom_bus.addr >> 1),
@@ -155,11 +155,20 @@ what I started with:
         ]
 ```
 
-* We shift off the last bit of the input (8-bit) address to create the output (16-bit) address, creating the following mapping:
-    * addresses `0x0`, `0x1`, `0x2`, `0x3`, `0x4`, `0x5`, `0x6`, `0x7` in the
-      8-bit space, corresponding with
-    * addresses `0x0`, `0x0`, `0x1`, `0x1`, `0x2`, `0x2`, `0x3`, `0x3` in the
-      16-bit space.
+* We shift off the last bit of the input (8-bit) address to create the output
+  (16-bit) address, creating the following mapping:
+
+  |   8-bit address | 16-bit address |
+  | --------------: | -------------: |
+  | `0x0` / `0b000` | `0x0` / `0b00` |
+  | `0x1` / `0b001` | `0x0` / `0b00` |
+  | `0x2` / `0b010` | `0x1` / `0b01` |
+  | `0x3` / `0b011` | `0x1` / `0b01` |
+  | `0x4` / `0b100` | `0x2` / `0b10` |
+  | `0x5` / `0b101` | `0x2` / `0b10` |
+  | `0x6` / `0b110` | `0x3` / `0b11` |
+  | `0x7` / `0b111` | `0x3` / `0b11` |
+
 * We select the 8-bit word from the 16-bit data coming out of the memory corresponding to the LSB of the input (8-bit) address.
     * `a.word_select(b, w)` is essentially `a[b*w : (b+1)*w]`.
     * When the LSB of the 8-bit address is 0, this will select `rd_data[0:8]`.
@@ -173,7 +182,7 @@ what I started with:
 
 Now we implement a reader from our ROM:
 
-```python
+```python literate
     def fsm(self, m: Module, rom_bus: ROMBus):
         m.d.sync += self.downstream.stb.eq(0)
 
@@ -204,16 +213,16 @@ give it to them!).
 * We start at address zero (*n*+0),
 * wait a cycle for the memory to see it (*n*+1),
 * and then pass it to the downstream (*n*+2) while advancing the address we read
-  (*n*'+0).
+  (*n*’+0).
 * The next cycle we're back in `WAIT` as advanced address is seen by the memory
-  (*n*'+1).
+  (*n*’+1).
 
 We end up strobing the downstream every other cycle. (That strobe is seen in the
-*n*+1 / *n*'+1 cycle.)
+*n*+1 / *n*’+1 cycle.)
 
 Let's simulate it and report the results:
 
-```python
+```python literate
 def main():
     dut = Example()
 
@@ -263,7 +272,7 @@ the same cycle that it's already propagated `mem[x]` into its data register.
 
 Let's now change our state machine to take advantage of this:
 
-```python
+```python literate
 def fsm(self: Example, m: Module, rom_bus: ROMBus):
     m.d.sync += self.downstream.stb.eq(0)
 
@@ -292,10 +301,10 @@ Example.fsm = fsm
 
 - We start at address zero (*n*+0),
 - while waiting a cycle for the memory to see it (*n*+1), we also increment the
-  address to one (*n*'+0),
+  address to one (*n*’+0),
 - and then pass the first result the downstream (*n*+2), while the memory is
-  just now seeing the second result (*n*'+1), and simultaneously increment the
-  address we read (*n*''+0).
+  just now seeing the second result (*n*’+1), and simultaneously increment the
+  address we read (*n*’’+0).
 
 We don't change state once we're in `READ`: every cycle we hand to downstream
 the data from the address we set two cycles ago; every cycle the memory is
@@ -324,9 +333,57 @@ problem might have been affecting the initial write to RAM, too.)
 
 Why?
 
-The problem is yawonk. TODO
+We'll review the translation statements:
 
 ```python
+m.d.comb += [
+    rom_rd.addr.eq(rom_bus.addr >> 1),
+    rom_bus.data.eq(
+        rom_rd.data.word_select(rom_bus.addr[0], 8)
+    ),
+]
+```
+
+This translation happens in the combinatorial domain, meaning that `rom_rd.addr`
+will change to `rom_bus.addr >> 1` as soon as a change on `rom_bus.addr` is
+registered — there isn't an additional cycle between the requested 8-bit address
+on the ROM bus changing and the read port's 16-bit address changing:
+
+| cycle |    statement issued | <nobr>ROM bus</nobr> addr | <nobr>read port</nobr> addr | <nobr>read port</nobr> data |
+| ----: | ------------------: | -----------: | -------------: | -------------: |
+| 0     | `rom_rd.addr.eq(0)` |          _x_ |            _x_ |            _x_ |
+| 1     | `rom_rd.addr.eq(1)` |          `0` |            `0` |            _x_ |
+| 2     | `rom_rd.addr.eq(2)` |          `1` |            `0` |       `0x2211` |
+| 3     | `rom_rd.addr.eq(3)` |          `2` |            `1` |       `0x2211` |
+| 4     | `rom_rd.addr.eq(4)` |          `3` |            `1` |       `0x4433` |
+| 5     | `rom_rd.addr.eq(5)` |          `4` |            `2` |       `0x4433` |
+
+Similarly, the ROM bus data port will be updated as soon as the read port's data
+port (`rom_rd.data`) changes.
+
+It will _also_ be updated as soon as the LSB of the ROM bus's requested address
+changes (`rom_bus.addr[0]`).
+
+But by the time we're actually getting data in the read port for an address, the
+ROM bus has registered the next address!  Thus we select the half of the 16-bit
+word based on the LSB of the _following_ address, which (given the addresses are
+sequential) will always be the opposite half to the one we really want:
+
+| cycle | <nobr>ROM bus</nobr> addr | <nobr>read port</nobr> data | <nobr>ROM bus</nobr> <nobr>addr [0]</nobr> |  <nobr>ROM bus</nobr> data |
+| ----: | -----------: | -------------: | ---------------: | ------------: |
+| 0     |          _x_ |            _x_ |              _x_ |           _x_ |
+| 1     |          `0` |            _x_ |              `0` |           _x_ |
+| 2     |          `1` |       `0x2211` |              `1` |        `0x22` |
+| 3     |          `2` |       `0x2211` |              `0` |        `0x11` |
+| 4     |          `3` |       `0x4433` |              `1` |        `0x44` |
+| 5     |          `4` |       `0x4433` |              `0` |        `0x33` |
+
+We need to introduce a delay in the address as used by the translation on the
+way back out, to account for the fact that read data corresponds to the address
+from the previous registered cycle, not this one:
+
+
+```python literate
 def translation(
     self: Example,
     m: Module,
@@ -345,6 +402,19 @@ def translation(
 Example.translation = translation
 ```
 
+This gives:
+
+| cycle | <nobr>ROM bus</nobr> addr | last <nobr>ROM bus</nobr> addr | <nobr>read port</nobr> data | last <nobr>ROM bus</nobr> <nobr>addr [0]</nobr> |  <nobr>ROM bus</nobr> data |
+| ----: | --------: | ------: | ----------: | ---------: | ----------: |
+| 0     |       _x_ |     _x_ |         _x_ |        _x_ |         _x_ |
+| 1     |       `0` |     _x_ |         _x_ |        _x_ |         _x_ |
+| 2     |       `1` |     `0` |    `0x2211` |        `0` |      `0x11` |
+| 3     |       `2` |     `1` |    `0x2211` |        `1` |      `0x22` |
+| 4     |       `3` |     `2` |    `0x4433` |        `0` |      `0x33` |
+| 5     |       `4` |     `3` |    `0x4433` |        `1` |      `0x44` |
+
+And so:
+
 ```console
 $ python -c 'import ex; ex.main()'
 data: 11
@@ -356,3 +426,6 @@ data: 66
 data: 77
 data: 88
 ```
+
+I like how the _x_’s in this table don't flow back "up" in time as the data
+dependencies flow right, whereas in the previous table, they do.
