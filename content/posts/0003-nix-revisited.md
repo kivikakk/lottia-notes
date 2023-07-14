@@ -228,9 +228,17 @@ previous experiments.  Some observations:
   [Ahem]: https://github.com/charlottia/hdx/commit/b3af8a0bc323931b4866475d72352ea2f00605c1
   [icestorm/default.nix]: https://github.com/NixOS/nixpkgs/blob/23.05/pkgs/development/embedded/fpga/icestorm/default.nix
 
-* Nix feels very appropriate for people like whose thought processes or
-  short-term memory may be disturbed without warning, given the nature of
+* Nix feels very appropriate for people like me, whose thought processes or
+  short-term memory may be disturbed without warning, thanks to the nature of
   work-in-progress state with declarative systems.
+
+  * By which I mean; for the most part, recovering the idea I'm halfway through
+    an attempt of[^int] is more "image load" than "procedural init".  It
+    doesn't require parsing shell history or terminal scrollback in order to
+    learn the meaning of the current state of my system---99% of the context is
+    in a file.
+
+    [^int]: Which I have to do once every 8--10 minutes on average, at a guess.
 
 * I'm avoiding `nix-env` and flakes.  I don't like the look of workflows that
   involve either.  [Xe describes] flakes as being suitable for use cases where
