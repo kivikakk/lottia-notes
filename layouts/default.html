@@ -5,24 +5,32 @@
     <% is_home = item == home %>
     <meta charset="utf-8">
     <% if is_home %>
-      <title><%= @config[:title] %></title>
+      <title><%= @config.fetch(:title) %></title>
+      <meta property="og:title" content="<%= @config.fetch(:title) %>">
+      <meta property="og:description" content="<%= @config.fetch(:description) %>">
     <% else %>
-      <title><%= @item[:title] %> - <%= @config[:title] %></title>
+      <title><%= @item.fetch(:title) %> - <%= @config.fetch(:title) %></title>
+      <meta property="og:title" content="<%= @item.fetch(:title) %>">
+      <meta property="og:site_name" content="<%= @config.fetch(:title) %>">
+      <meta property="og:description" content="<%= @item.fetch(:description) %>">
     <% end %>
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="website">
+
     <meta name="author" content="Charlotte">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/stylesheet.css">
     <link rel="stylesheet" href="/syntax.css">
 
     <% if articles.any? { |i| !i[:draft] } %>
-      <link href="/atom.xml" rel="alternate" title="<%= @config[:title] %>" type="application/atom+xml">
+      <link href="/atom.xml" rel="alternate" title="<%= @config.fetch(:title) %>" type="application/atom+xml">
     <% end %>
     <meta name="generator" content="Nanoc <%= Nanoc::VERSION %>">
   </head>
   <body id="top">
     <div class="flex">
       <main>
-        <h1><%= @item[:title] %></h1>
+        <h1><%= @item.fetch(:title) %></h1>
         <% if created_at = @item[:created_at] %>
           <p class="created-at"><%= created_at.strftime("%Y-%m-%d") %></p>
         <% end %>
@@ -39,7 +47,7 @@
             <h2>Notes</h2>
             <ul>
               <% items.each do |item| %>
-                <li class="<%= item == @item ? "active" : "" %>"><%= link_to item[:title], item %></li>
+                <li class="<%= item == @item ? "active" : "" %>"><%= link_to item.fetch(:title), item %></li>
               <% end %>
             </ul>
           <% end %>
@@ -48,7 +56,7 @@
             <h2>Drafts</h2>
             <ul>
               <% items.each do |item| %>
-                <li class="<%= item == @item ? "active" : "" %>"><%= link_to item[:title], item %></li>
+                <li class="<%= item == @item ? "active" : "" %>"><%= link_to item.fetch(:title), item %></li>
               <% end %>
             </ul>
           <% end %>
@@ -71,7 +79,7 @@
                       <% if !details[:first] %>
                         </li><li>
                       <% end %>
-                      <%= link_to details[:text], details[:href] %>
+                      <%= link_to details.fetch(:text), details.fetch(:href) %>
                     <% end %>
                   <% end %>
                 </li>

@@ -2,6 +2,9 @@
 title: Untangling cycles
 created_at: 2023-06-29T10:51:00+1000
 kind: article
+description: >-
+  Wherein the author perceives time in multiple lights, simultaneously, and
+  logic does too, but, uh, differently.
 ---
 
 This is straight from my journal, so it starts without warning.

@@ -9,6 +9,7 @@ data_sources:
 
 base_url: https://notes.hrzn.ee
 title: Charlotte's notes
+description: My notes as I'm learning digital design.
 author_name: Charlotte
 author_uri: https://notes.hrzn.ee
 

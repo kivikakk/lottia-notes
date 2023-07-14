@@ -3,6 +3,9 @@ title: Installing an HDL toolchain from source
 created_at: 2023-06-27T19:12:00+1000
 kind: article
 back_to_top: scope
+description: >-
+  A fairly detailed guide on building and installing a gateware toolchain in a
+  self-contained and repeatable way.
 ---
 
 <section id="opening">
