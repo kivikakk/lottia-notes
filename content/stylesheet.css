@@ -104,14 +104,20 @@ main pre {
   margin-bottom: 20px;
 
   padding: 8px 12px;
+
+  line-height: normal;
 }
 
 main pre * {
   font-family: monospace;
+  font-size: 13px;
 }
 
 main p code, main li > code, main table code {
-  padding: 2px;
+  margin-left: 2px;
+  margin-right: 2px;
+
+  padding: 2px 4px;
 
   border: 1px solid var(--inline-code-border);
 
