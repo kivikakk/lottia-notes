@@ -124,9 +124,13 @@ previous experiments.  Some observations:
   [defined before]: https://github.com/fish-shell/fish-shell/issues/8395#issuecomment-957135261
   [here we go]: https://github.com/fish-shell/fish-shell/blob/861da91bf1029c1442f154f6c369b1b6030b29f3/share/functions/alias.fish#L61-L68
 
-  *  Time to hack that apart.  It's almost disgusting how easy Nix makes
-     patching packages I use and then having that just appear on all my
-     systems!  Fuck!  I'm sure there's a less nuclear option but I just _wanna_.
+  * Time to hack that apart.  It's almost disgusting how easy Nix makes
+    patching packages I use and then having that just appear on all my
+    systems!  Fuck!  I'm sure there's a less nuclear option but I just _wanna_.
+
+    * This is the stuff [dreams are made of].
+
+      [dreams are made of]: https://aperture.ink/@charlotte/110713791516555062
 
 * As with anything, keep the stdlib source open in a window/tab/pane.  Here
   this means `/nix/var/nix/profiles/per-user/root/channels/nixpkgs/`.
