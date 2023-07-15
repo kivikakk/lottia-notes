@@ -138,7 +138,7 @@ previous experiments.  Some observations:
 * Builds may _not_ generally be reproducible between NixOS and Nix on a
   different platform.  [Ahem].
 
-  I think this implies building [nixpkgs 23.05's
+  I think this implies building [Nixpkgs 23.05's
   icestorm][icestorm/default.nix] on macOS today would fail.
 
   Let's verify.  We want to use `nix-build --option substitute false` to
