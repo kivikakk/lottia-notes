@@ -128,7 +128,7 @@ previous experiments.  Some observations:
     patching packages I use and then having that just appear on all my
     systems!  Fuck!  I'm sure there's a less nuclear option but I just _wanna_.
 
-    * This is the stuff [dreams are made of].
+    * Edit: this is the stuff [dreams are made of].
 
       [dreams are made of]: https://aperture.ink/@charlotte/110713791516555062
 
@@ -186,7 +186,7 @@ previous experiments.  Some observations:
       rev = "d20a5e9001f46262bf0cef220f1a6943946e421d";
       sha256 = lib.fakeSha256;
     };
-  })'
+  })
   ```
 
   We do the little dance to get the fixed-output derivation hash suitable for the
