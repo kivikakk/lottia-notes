@@ -16,5 +16,5 @@ author_uri: https://lottia.net/notes
 deploy:
   default:
     kind: rsync
-    dst: "aurora.snowy-delta.ts.net:~/w/notes"
+    dst: "www@sylph.snowy-delta.ts.net:~/public/notes"
     options: ["-avz", "--delete-after"]
