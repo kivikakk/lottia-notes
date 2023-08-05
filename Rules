@@ -15,6 +15,8 @@ compile '/**/*.md' do
 
   if item[:draft]
     target = target.gsub!(%r{\A/posts/}, '/drafts/')
+  else
+    target = target.gsub(%r{\A/posts/(.+)/index.html\z}, '/\1.html')
   end
 
   write target

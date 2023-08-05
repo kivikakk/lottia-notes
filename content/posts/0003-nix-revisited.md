@@ -13,7 +13,7 @@ previous experiments.  Some observations:
 
 [Nix]: https://nixos.org/
 [`hdx`]: https://github.com/charlottia/hdx
-[Installing an HDL toolchain from source]: https://notes.hrzn.ee/posts/0001-hdl-toolchain-source/
+[Installing an HDL toolchain from source]: https://lottia.net/notes/0001-hdl-toolchain-source.html
 
 * You must thread the needle between "properly sitting down and reading the
   language guide" and "actively replacing previously-statefully-configured

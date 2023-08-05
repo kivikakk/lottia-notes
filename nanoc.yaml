@@ -7,11 +7,11 @@ data_sources:
   - type: filesystem
     encoding: utf-8
 
-base_url: https://notes.hrzn.ee
+base_url: https://lottia.net/notes
 title: Charlotte's notes
 description: My notes as I'm learning digital design.
 author_name: Charlotte
-author_uri: https://notes.hrzn.ee
+author_uri: https://lottia.net/notes
 
 deploy:
   default:
