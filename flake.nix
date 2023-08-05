@@ -13,13 +13,14 @@
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {inherit system;};
+      ruby = pkgs.ruby;
     in {
       formatter = pkgs.alejandra;
 
       devShells.default = let
         env = pkgs.bundlerEnv {
           name = "notes-bundler-env";
-          inherit (pkgs) ruby;
+          inherit ruby;
           gemfile = ./Gemfile;
           lockfile = ./Gemfile.lock;
           # Hacks in platforms for commonmarker and nokogiri per
@@ -35,7 +36,10 @@
       in
         pkgs.mkShell {
           name = "notes";
-          buildInputs = [env];
+          buildInputs = [
+            ruby
+            env
+          ];
         };
     });
 }
