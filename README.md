@@ -1,5 +1,5 @@
 Source for <https://notes.hrzn.ee>.
 
 ```shell
-nix-shell --run "make live"
+nix develop --command make live
 ```
