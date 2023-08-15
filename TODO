@@ -1,4 +1,2 @@
-- www@sylph
-- start serving that at new domain
 - add redirects on old domain, including rewrite
 - remove src from aurora

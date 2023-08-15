@@ -1,1 +1,1 @@
-<%= xml_sitemap(items: items.select { |i| !i[:draft] && i.path.end_with?('/') }) %>
+<%= xml_sitemap(items: items.select { |i| !i[:draft] && (i.path.end_with?('.html') || i.path.end_with?('/')) }) %>
