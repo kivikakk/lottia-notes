@@ -64,7 +64,7 @@ main :hover > .anchor {
   visibility: visible;
 }
 
-main .created-at {
+main .created-at, main .updated-at {
   font-style: oblique;
 }
 
@@ -167,6 +167,10 @@ main table code {
   border: none;
 
   background: none;
+}
+
+main img {
+  max-width: 100%;
 }
 
 main section.footnotes {
@@ -414,8 +418,12 @@ footer {
     color: #e7edf4;
   }
 
-  a {
-    filter: brightness(1.8);
+  a:link, a:visited {
+    color: #0089ff;
+  }
+
+  a:hover {
+    color: #02dcde;
   }
 
   .sidebar h2 {

@@ -32,7 +32,14 @@
       <main>
         <h1><%= @item.fetch(:title) %></h1>
         <% if created_at = @item[:created_at] %>
-          <p class="created-at"><%= created_at.strftime("%Y-%m-%d") %></p>
+          <p>
+            <span class="created-at"><%= created_at.strftime("%Y-%m-%d") %></span>
+            <% if updated_at = @item[:updated_at] %>
+              (created),
+              <span class="updated-at"><%= updated_at.strftime("%Y-%m-%d") %></span>
+              (updated)
+            <% end %>
+          </p>
         <% end %>
         <%= yield %>
       </main>
