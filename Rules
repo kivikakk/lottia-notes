@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 compile '/**/*.md' do
-  filter :erb
+  filter :erb unless item.identifier =~ %r{/posts/}
   filter :commonmarker
   filter :colorize_syntax, default_colorizer: :rouge
   filter :toc
