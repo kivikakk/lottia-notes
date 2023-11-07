@@ -10,7 +10,7 @@ data_sources:
 base_url: https://lottia.net/notes
 title: Charlotte's notes
 description: My notes as I'm learning digital design.
-author_name: Charlotte
+author_name: Asherah "Charlotte" Connor
 author_uri: https://lottia.net/notes
 
 deploy:
