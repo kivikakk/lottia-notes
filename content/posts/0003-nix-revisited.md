@@ -12,7 +12,7 @@ I realized I was in error in not using [Nix], and have been addressing that.
 previous experiments.  Some observations:
 
 [Nix]: https://nixos.org/
-[`hdx`]: https://github.com/charlottia/hdx
+[`hdx`]: https://github.com/kivikakk/hdx
 [Installing an HDL toolchain from source]: https://lottia.net/notes/0001-hdl-toolchain-source.html
 
 * You must thread the needle between "properly sitting down and reading the
@@ -229,7 +229,7 @@ previous experiments.  Some observations:
 
   Sure enough, it does fail.
 
-  [Ahem]: https://github.com/charlottia/hdx/commit/b3af8a0bc323931b4866475d72352ea2f00605c1
+  [Ahem]: https://github.com/kivikakk/hdx/commit/b3af8a0bc323931b4866475d72352ea2f00605c1
   [icestorm/default.nix]: https://github.com/NixOS/nixpkgs/blob/23.05/pkgs/development/embedded/fpga/icestorm/default.nix
 
 * Nix feels very appropriate for people like me, whose thought processes or

@@ -14,7 +14,7 @@ help me make my I²C controller implementation actually support it.
 
 These are some moments I've had while doing so.
 
-[I²C, oh! Big stretch]: https://github.com/charlottia/i2c_obs
+[I²C, oh! Big stretch]: https://github.com/kivikakk/i2c_obs
 
 </section>
 
@@ -26,7 +26,7 @@ I added a [tiny UART module] to help me debug it. First I emitted a `<`
 character when starting a big stretch, and a `>` character once we're all
 relaxed.
 
-[tiny UART module]: https://github.com/charlottia/i2c_obs/commit/1078a55c9f5bd63fae9707586393535ed7afcd07#diff-fbbd4dd0ae5cec5958577b18349c32c4e93ed8df0846aacdfe916267b503e6f4
+[tiny UART module]: https://github.com/kivikakk/i2c_obs/commit/1078a55c9f5bd63fae9707586393535ed7afcd07#diff-fbbd4dd0ae5cec5958577b18349c32c4e93ed8df0846aacdfe916267b503e6f4
 
 I was going to then write the number of cycles counted during the SCL tLOW
 period in decimal but eventually decided, Who Really Can Be Bothered, and just
@@ -107,7 +107,7 @@ high on its own, and then only to switch the output-enable on when it needs to
 be driven low. This lets anyone else on the bus keep SCL low, thus stretching
 the clock.
 
-[needed]: https://github.com/charlottia/sh1107/commit/bb7388b9f1a3635711337a304bc17e3c682c8508
+[needed]: https://github.com/kivikakk/sh1107/commit/bb7388b9f1a3635711337a304bc17e3c682c8508
 
 This worked [nicely] when it comes to letting the bus stretch, but today I was
 trying to get the measurement to come out right --- I wanted to have the little
@@ -137,8 +137,8 @@ I'm here.
 [^fv]: Hey, that sounds like something I could really formally verify.
   I have [the start] of a verification setup, might as well use it.
   
-  [the start]: https://github.com/charlottia/sh1107/blob/7b05e685eb6ee53b9f069410c9f12005cd580d99/sh1107/formal/__init__.py#L133-L155
+  [the start]: https://github.com/kivikakk/sh1107/blob/7b05e685eb6ee53b9f069410c9f12005cd580d99/sh1107/formal/__init__.py#L133-L155
 
 </section>
 
-[thus]: https://github.com/charlottia/i2c_obs/commit/da9b89b43319114f3bb0fd43511ae934b10b7fac
+[thus]: https://github.com/kivikakk/i2c_obs/commit/da9b89b43319114f3bb0fd43511ae934b10b7fac
