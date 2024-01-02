@@ -2,7 +2,7 @@
 title: Home
 ---
 
-Experienced systems engineer learning digital design.
+Experienced systems engineer playing with digital design and Nix.
 
 I'm taking notes here.
 

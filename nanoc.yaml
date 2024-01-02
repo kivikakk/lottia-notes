@@ -8,9 +8,9 @@ data_sources:
     encoding: utf-8
 
 base_url: https://lottia.net/notes
-title: Charlotte's notes
-description: My notes as I'm learning digital design.
-author_name: Asherah "Charlotte" Connor
+title: lottia notes
+description: My notes as I'm playing with digital design and Nix.
+author_name: Ashe Connor
 author_uri: https://lottia.net/notes
 
 deploy:
