@@ -20,7 +20,7 @@ guaranteed to be at least a little bit Fun™. And it was! :)
 
 Stock Akkoma uses [Earmark](https://github.com/pragdave/earmark), which
 looks like a lovely library, but maybe a lil out of date and out of step with
-CommonMark/GFM. **We deserve Comrak**.
+CommonMark/GFM. **We deserve [Comrak](https://github.com/kivikakk/comrak)**.
 
 Happily enough, a Google search revealed a Nathan Faucett had already done
 most of the hard work of using Comrak from Elixir in
