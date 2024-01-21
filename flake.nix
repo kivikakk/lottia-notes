@@ -1,19 +1,12 @@
 {
-  inputs.flake-compat = {
-    # for shell.nix.
-    url = github:edolstra/flake-compat;
-    flake = false;
-  };
-
   outputs = {
     self,
     nixpkgs,
     flake-utils,
-    flake-compat,
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {inherit system;};
-      ruby = pkgs.ruby;
+      inherit (pkgs) ruby;
     in {
       formatter = pkgs.alejandra;
 
