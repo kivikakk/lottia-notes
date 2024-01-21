@@ -10,7 +10,7 @@ data_sources:
 base_url: https://lottia.net/notes
 title: lottia notes
 description: My notes as I'm playing with digital design and Nix.
-author_name: Ashe Connor
+author_name: Amelia Cuss
 author_uri: https://lottia.net/notes
 
 deploy:
