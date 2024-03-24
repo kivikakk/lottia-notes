@@ -7,14 +7,8 @@ data_sources:
   - type: filesystem
     encoding: utf-8
 
-base_url: https://lottia.net/notes
+base_url: https://kivikakk.ee/notes
 title: lottia notes
 description: My notes as I'm playing with digital design and Nix.
-author_name: Amelia Cuss
-author_uri: https://lottia.net/notes
-
-deploy:
-  default:
-    kind: rsync
-    dst: "www@sylph.mesh.arrakis.hrzn.ee:~/public/notes"
-    options: ["-avz", "--delete-after"]
+author_name: amelia cuss
+author_uri: https://kivikakk.ee/notes
