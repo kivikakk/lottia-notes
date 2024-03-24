@@ -90,12 +90,11 @@ oscilloscope at some stage! Point is, my initial idea was to train on the SCL
 tLOW period, and then start holding it low for ~twice that period as of the next
 low, and thus stretch the clock (a LOT).
 
-When you're a noob like me, you may encounter [this]:
+When you're a noob like me, you may encounter this:
 
-[![a few breadboards with various boards on them, an OLED, a few LEDs, an oscilloscope, way too many cables, a mess][half-pull.jpg]][half-pull.jpg]
-
-[this]: https://aperture.ink/@charlotte/110931900646817865
-[half-pull.jpg]: https://aperture.ink/system/media_attachments/files/110/931/897/543/950/932/original/60650d4451ef74f2.jpeg
+(image link no longer valid -- alt text was: a few breadboards with various
+boards on them, an OLED, a few LEDs, an oscilloscope, way too many cables, a
+mess)
 
 Here we have the bus only getting pulled up halfway. This is what it looks like
 when someone is trying to ground your bus _at the same time_ as someone trying

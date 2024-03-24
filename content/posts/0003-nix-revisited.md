@@ -13,7 +13,7 @@ previous experiments.  Some observations:
 
 [Nix]: https://nixos.org/
 [`hdx`]: https://hrzn.ee/kivikakk/hdx
-[Installing an HDL toolchain from source]: https://lottia.net/notes/0001-hdl-toolchain-source.html
+[Installing an HDL toolchain from source]: https://kivikakk.ee/notes/0001-hdl-toolchain-source.html
 
 * You must thread the needle between "properly sitting down and reading the
   language guide" and "actively replacing previously-statefully-configured
@@ -130,7 +130,7 @@ previous experiments.  Some observations:
 
     * Edit: this is the stuff [dreams are made of].
 
-      [dreams are made of]: https://aperture.ink/@charlotte/110713791516555062
+      [dreams are made of]: https://web.archive.org/web/20231007165916/https://aperture.ink/system/media_attachments/files/110/713/786/757/975/142/original/f04db54777ab7a44.png
 
 * As with anything, keep the stdlib source open in a window/tab/pane.  Here
   this means `/nix/var/nix/profiles/per-user/root/channels/nixpkgs/`.

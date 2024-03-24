@@ -98,7 +98,7 @@ repository:
 I _really_ like this. In a tangible sense, my operating systems are becoming _mine_.
 
 
-[Nix refisited]: https://lottia.net/notes/0003-nix-revisited.html
+[Nix refisited]: https://kivikakk.ee/notes/0003-nix-revisited.html
 [git-log's pretty formats]: https://git-scm.com/docs/git-log#_pretty_formats
 [git patch]: https://hrzn.ee/kivikakk/git/commit/92a62a03692dd1792d5a1c7c0650d5794d25e16f
 [Amaranth]: https://github.com/amaranth-lang/amaranth

@@ -8,12 +8,6 @@ description: >-
 
 <section id="top">
 
-Adapted from the original [Fediverse post].
-
-[Fediverse post]: https://lottia.net/notice/AdQMmMEosy8aiz10e8
-
----
-
 First up: I've never done more than toy with Elixir before, and never with Nix
 or Rust, so this "simply stuff Nix, Elixir and Rust into a magic hat" trick was
 guaranteed to be at least a little bit Fun™. And it was! :)
