@@ -47,7 +47,7 @@
         <div class="sidebar-inner">
           <ul>
             <li class="<%= is_home ? "active" : "" %>"><%= link_to "Home", home %></li>
-            <li><%= link_to "Author", "https://hrzn.ee/kivikakk", rel: "me" %></li>
+            <li><%= link_to "Author", "https://kivikakk.ee", rel: "me" %></li>
           </ul>
 
           <% if (items = sorted_articles.select { |item| !item[:draft] }).any? %>
