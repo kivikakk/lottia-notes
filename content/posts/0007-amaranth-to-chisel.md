@@ -1,6 +1,7 @@
 ---
 title: Amaranth to Chisel
 created_at: 2024-05-09T17:45:00+0300
+updated_at: 2024-06-24T18:00:00+0300
 kind: article
 description: >-
   Learning your second HDL is kinda like learning your second programming language.
@@ -9,9 +10,8 @@ description: >-
 
 <section id="top">
 
-Adapted from [kalaturg's README].
-
-[kalaturg's README]: https://github.com/kivikakk/kalaturg
+edit: A lot of the following doesn't apply any more, though it's all been very
+helpful in learning.
 
 ---
 
