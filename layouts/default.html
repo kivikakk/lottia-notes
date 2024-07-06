@@ -5,14 +5,14 @@
     <% is_home = item == home %>
     <meta charset="utf-8">
     <% if is_home %>
-      <title><%= @config.fetch(:title) %></title>
-      <meta property="og:title" content="<%= @config.fetch(:title) %>">
-      <meta property="og:description" content="<%= @config.fetch(:description) %>">
+      <title><%= h @config.fetch(:title) %></title>
+      <meta property="og:title" content="<%= h @config.fetch(:title) %>">
+      <meta property="og:description" content="<%= h @config.fetch(:description) %>">
     <% else %>
-      <title><%= @item.fetch(:title) %> - <%= @config.fetch(:title) %></title>
-      <meta property="og:title" content="<%= @item.fetch(:title) %>">
-      <meta property="og:site_name" content="<%= @config.fetch(:title) %>">
-      <meta property="og:description" content="<%= @item.fetch(:description) %>">
+      <title><%= h @item.fetch(:title) %> - <%= h @config.fetch(:title) %></title>
+      <meta property="og:title" content="<%= h @item.fetch(:title) %>">
+      <meta property="og:site_name" content="<%= h @config.fetch(:title) %>">
+      <meta property="og:description" content="<%= h @item.fetch(:description) %>">
     <% end %>
     <meta property="og:locale" content="en_US">
     <meta property="og:type" content="website">
@@ -23,14 +23,14 @@
     <link rel="stylesheet" href="/syntax.css">
 
     <% if articles.any? { |i| !i[:draft] } %>
-      <link href="/atom.xml" rel="alternate" title="<%= @config.fetch(:title) %>" type="application/atom+xml">
+      <link href="/atom.xml" rel="alternate" title="<%= h @config.fetch(:title) %>" type="application/atom+xml">
     <% end %>
     <meta name="generator" content="Nanoc <%= Nanoc::VERSION %>">
   </head>
   <body id="top">
     <div class="flex">
       <main>
-        <h1><%= @item.fetch(:title) %></h1>
+        <h1><%= h @item.fetch(:title) %></h1>
         <% if created_at = @item[:created_at] %>
           <p>
             <span class="created-at"><%= created_at.strftime("%Y-%m-%d") %></span>
