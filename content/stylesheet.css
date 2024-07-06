@@ -88,13 +88,17 @@ main ul, main ol {
   padding-left: 20px;
 }
 
+main ul ul {
+  margin: 0;
+}
+
 main li {
   font-size: 15px;
 
   line-height: 22px;
 }
 
-main ul li {
+main ul > li {
   list-style-type: square;
 }
 

@@ -7,8 +7,8 @@ data_sources:
   - type: filesystem
     encoding: utf-8
 
-base_url: https://kivikakk.ee/notes
+base_url: https://lottia.net/notes
 title: lottia notes
 description: My notes as I'm playing with digital design and Nix.
-author_name: Asherah Connor
-author_uri: https://kivikakk.ee/notes
+author_name: Asherah/Charlotte Connor
+author_uri: https://lottia.net/notes

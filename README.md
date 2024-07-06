@@ -1,1 +1,1 @@
-Source for <https://kivikakk.ee/notes> (formerly <https://lottia.net/notes>).
+Source for <https://lottia.net/notes> (sometimes <https://kivikakk.ee/notes>).

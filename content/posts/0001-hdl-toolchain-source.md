@@ -30,7 +30,7 @@ in preference to (and sometimes instead of) instructing on how to build.
 I've done this process three times recently while rejigging my development
 environments, so I'm describing it for posterity/others.
 
-[requirements]: https://hrzn.ee/kivikakk/sh1107/tree/aeb1c3f77d3226760755331624dd7920779cc2b7#requirements
+[requirements]: https://github.com/kivikakk/sh1107/tree/aeb1c3f77d3226760755331624dd7920779cc2b7#requirements
 [OSS CAD Suite]: https://github.com/YosysHQ/oss-cad-suite-build
 
 [^baby]: _baby's first gateware_, in fact.
