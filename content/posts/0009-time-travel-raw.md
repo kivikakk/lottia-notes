@@ -1,16 +1,14 @@
 ---
 title: Time travel, raw
-created_at: 2024-07-06T17:07:00+0300
+created_at: 2024-07-06T19:21:00+0300
 kind: article
 description: >-
-  The typical hypothetical "who are you coding for" example meant to shock
-  you into writing better code is "yourself in six months", but it turns out
-  four is completely adequate to get lost.
+  Raw log from my notes re: "Time travel".
 ---
 
 <section id="top">
 
-My raw log from my notes re: [Time travel] follows.
+Raw log from my notes re: [Time travel] follows.
 
 [Time travel]: 0008-time-travel.html
 
