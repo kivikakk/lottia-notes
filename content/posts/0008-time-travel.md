@@ -20,19 +20,22 @@ four is completely adequate to get lost.
 
 ## Start
 
-In February I started writing my first RV32 core. By the end of the month, I
-had enough of one going to run some sample code compiled with GCC for RV32I,
-interacting with UART via MMIO, which was such a nice feeling. It was written
-in a very dumb manner --- meaning it used 95% of the UP5K and took 3 minutes to
-synthesise --- but on the other hand it ran pretty much at one cycle per cycle!
-(I hadn't pipelined instruction memory fetches, so it _didn't_, but that was the
-only thing standing in the way of that. It was written very, uh, plainly.)
+In February I started writing my first RV32 core, [Sae]. By the end of the
+month, I had enough of one going to run some sample code compiled with GCC for
+RV32I, interacting with UART via MMIO, which was such a nice feeling. It was
+written in a very dumb manner --- meaning it used 95% of the UP5K and took 3
+minutes to synthesise --- but on the other hand it ran pretty much at one cycle
+per cycle! (I hadn't pipelined instruction memory fetches, so it _didn't_, but
+that was the only thing standing in the way of that. It was written very, uh,
+plainly.)
+
+[Sae]: https://github.com/kivikakk/sae
 
 Next I wanted to tackle RV32C, and one thing I wasn't happy with was [how I was
 actually defining the ISA][isa-def]. It was very manual, and it felt like there
 was a lot that could be extracted out in less ad-hoc ways, so that I didn't then
 have to repeat myself even more when adding RV32C, or e.g. making it possible to
-define a thing called "RV32E" (which is just RV32I with 16 X registers insteah
+define a thing called "RV32E" (which is just RV32I with 16 X registers instead
 of 32) as a refinement of RV32I instead of repeating a whole bunch of code, and
 then making that selectable as the basis for a core/hart. This also provided an
 opportunity to expose more metadata for the built-in assembler and disassembler
@@ -70,7 +73,7 @@ to stop using Amaranth entirely and
 [learned to do digital design in Chisel][chisel], which was a big undertaking.
 A lot of the machinery around the design needed to be implemented --- connecting
 to resources on IO pins, the concept of building for different platforms, etc.
---- a lot of the toolchain needed to be replaced/ rebuilt, but the actual manner
+--- a lot of the toolchain needed to be replaced/rebuilt, but the actual manner
 of design changed a lot too. I'd taught myself HDL with Amaranth, and I sort
 of retaught myself it with Chisel, grasping the fundamentals more clearly.
 
@@ -88,10 +91,10 @@ Three-ish weeks ago, I started using Amaranth again, and it was time to see
 where my old work was at. First, I ported everything new from Chryse back to
 Rain, freeing it from its weird Nix flake and so giving it a new name, [Niar].
 Then I ported my last Chisel project back to Amaranth, [ili9341spi], using it as
-the basis for testing Niar. (It's just an TFT LCD controller, rendering Conway's
+the basis for testing Niar. (It's just a TFT LCD controller, rendering Conway's
 Game of Life.)
 
-[Niar]: https://github.com/kivikakk/hdx?tab=readme-ov-file#rain
+[Niar]: https://github.com/kivikakk/niar
 [ili9341spi]: https://github.com/kivikakk/ili9341spi
 
 Once I'd gotten things to my satisfaction, it was time for my next project. I'd
@@ -160,19 +163,20 @@ comparing `ICESTORM_LC` counts of the final design (or just cells reported by
 Yosys where PNR was failing because the design got too big).
 
 This is extremely fraught and open to misinterpretation, because Yosys' output
-is optimised, and with many passes involved, there is no direct link between
-a given change and the effect on output size. PNR is similar, especially when
-up against resource limits, and so the whole thing requires investing not too
-much importance in any one result. You're just kinda vibing it out, making
-hypotheses about what might be cheaper post-opt, and then, usually, trying to
-reason to yourself why it wasn't cheaper. There's a lot of holding of judgment
+is optimised, and with many passes involved, there is no direct link between a
+given change and the effect on output size. PNR is similar, especially when up
+against resource limits, and so the whole thing requires investing not too much
+importance in any one result. You're just kinda vibing it out, making hypotheses
+about what might be cheaper post-opt, and then, usually, trying to reason to
+yourself why it wasn't actually cheaper. There's a lot of holding of judgment
 because maybe you need to change _all_ the things of class X before you can
 observe the true difference between two methods.
 
-The entire log of this process is included in the raw log with the subheading
-["Decombing"](0009-time-travel-raw.html#decombing). At the entry to this stage,
-synthesis took 2:47 and PNR completed with 5033/5280 (95%) of `ICESTORM_LC`s
-used. We finished at synthesis taking 0:10 and using 2194/5280 (41%).
+A play-by-play of this whole process is included in the raw log with the
+subheading ["Decombing"](0009-time-travel-raw.html#decombing). At the entry
+to this stage, synthesis took 2:47 and PNR completed with 5033/5280 (95%) of
+`ICESTORM_LC`s used. We finished at synthesis taking 0:10 and using 2194/5280
+(41%).
 
 </section>
 
@@ -185,16 +189,17 @@ Now we were in a position to start understanding the refactor WIP.
 Step one was rebasing the old branch onto the new. I'd refactored and moved
 things around a lot (including e.g. using Amaranth's new async testbench stuff),
 so any commit that touched the existing gateware or testing infrastructure
-conflicted, but these were nice little opportunities to understand what I was
-doing in context. The branch itself had a lot of nice refactors in other areas
-too, so by the time I'd finished rebasing, I felt in a fairly good position,
-except for the fact that neither building it nor running any of the tests worked
-because there was a syntax error in the core ISA definition machinery.
+conflicted, but these were nice little opportunities to understand pieces of
+what I was doing in context. The branch itself had a lot of nice refactors
+in other areas too, so by the time I'd finished rebasing, I felt in a fairly
+good position, except for the fact that neither building it nor running any of
+the tests worked because there was a syntax error in the core ISA definition
+machinery.
 
 The next step was to get it running, because I couldn't hope to complete
-whatever it was I was doing in March without understanding any of its context,
-namely the entire new ISA kit, and understanding a system is so much easier when
-you can see it running.
+whatever it was I was doing in March without understanding any of its context
+--- namely the entire new ISA kit --- and understanding a system is so much
+easier when you can see it running.
 
 To start with, I just commented out the broken line, and it ran, with 44/64
 tests passing. Without much in the way of understanding everything around it, I
@@ -204,11 +209,11 @@ At this point, I kind of understand what I was going for, but now I need to
 understand everything else to know how to make it happen.
 
 The way to do that turned out to be just reading the new code over and over
-again, eventually defining it from the top down. The entire log of this process
-is included in the raw log under the subheading ["Design"], and by the end of
-it, I'd recapitulated every decision made in coming up with it. The next steps
-I'd imagined [followed naturally], and although I entered this stage with no
-intention to continue to use this design (on account of its magic-ness), it
+again, outlining it in natural language from the top down. The result of this
+process is included in the raw log under the subheading ["Design"], and by the
+end of it, I'd recapitulated every decision made in coming up with it. The next
+steps I'd imagined [followed naturally], and although I entered this stage with
+no intention to continue to use this design (on account of its magic-ness), it
 still made sense to me to finish my last WIP before turning my mind to simpler
 design, since without a fully proven concept I can't say I've grasped it enough
 to actually design it again. This got us to 63/64 tests, with the last one being
@@ -222,10 +227,10 @@ completing that change, over 4 months later, in a completely different place and
 time. Continuity in the face of countless discontinuities.
 
 Incidentally, this branch doesn't include much in the way of actual RV32C
-support, since I got completely caught up with designing the new ISA kit with
-just the existing RV32I support as a basis. I think I won't bother with that,
-though, since it'll likely entail further support from the ISA kit, and in the
-current design that means even more magic. Time to simplify.
+support, since I got completely caught up with designing the new ISA kit using
+the existing RV32I support as a basis. I think I won't bother with that, though,
+since it'll likely entail further support from the ISA kit, and in the current
+design that means even more magic. Time to simplify.
 
 [Raw notes] follow.
 
