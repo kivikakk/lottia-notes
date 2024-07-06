@@ -19,7 +19,7 @@
 
 body {
   background: #fff;
-  max-width: 880px;
+  max-width: 1080px;
 }
 
 .flex {
@@ -38,7 +38,7 @@ a:hover {
 }
 
 main {
-  width: 540px;
+  width: 740px;
 
   margin-top: 40px;
   margin-left: 60px;
@@ -305,7 +305,7 @@ footer {
   text-align: center;
 }
 
-@media screen and (max-width: 880px) {
+@media screen and (max-width: 1080px) {
   .flex {
     display: block;
   }
@@ -361,7 +361,7 @@ footer {
   }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 840px) {
   main {
     width: auto;
 

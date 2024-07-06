@@ -14,7 +14,7 @@ guaranteed to be at least a little bit Fun™. And it was! :)
 
 Stock Akkoma uses [Earmark](https://github.com/pragdave/earmark), which
 looks like a lovely library, but maybe a lil out of date and out of step with
-CommonMark/GFM. **We deserve [Comrak](https://hrzn.ee/kivikakk/comrak)**.
+CommonMark/GFM. **We deserve [Comrak](https://github.com/kivikakk/comrak)**.
 
 Happily enough, a Google search revealed a Nathan Faucett had already done
 most of the hard work of using Comrak from Elixir in
@@ -23,7 +23,7 @@ most of the hard work of using Comrak from Elixir in
 Ported it for Comrak and [Rustler](https://github.com/rusterlium/rustler)
 changes in the last 5 years, and then learned about the various ways to
 juggle Elixir and Mix releases/deps in Nix. [Several hundred lines of hack-ish
-later](https://hrzn.ee/kivikakk/ex-markdown/compare/master...lottia) and
+later](https://github.com/kivikakk/ex-markdown/compare/master...lottia) and
 `ex-markdown` was now fit for purpose.
 
 Special care was taken to ensure both `nix develop`- and `nix build`-based
@@ -54,7 +54,7 @@ in the one closure and no overlap.
 For now we hack it somewhat, and reproduce some of `ex-markdown`'s derivation in
 our Akkoma fork — `beamPackages` doesn't have anything like `overrideBeamAttrs`
 or `overrideMixAttrs` at the moment.
-[There's a fair bit more Nix](https://hrzn.ee/kivikakk/akkoma/compare/v3.10.4...lottia)
+[There's a fair bit more Nix](https://github.com/kivikakk/akkoma/compare/v3.10.4...lottia)
 involved therein.
 
 We started with upstream Nixpkgs' Akkoma package definition (again, copying the
