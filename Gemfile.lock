@@ -14,8 +14,8 @@ GEM
       rack-livereload (~> 0.3)
     builder (3.2.4)
     colored (1.2)
-    commonmarker (1.0.0.pre9-arm64-darwin)
-    commonmarker (1.0.0.pre9-x86_64-linux)
+    commonmarker (1.0.4-arm64-darwin)
+    commonmarker (1.0.4-x86_64-linux)
     concurrent-ruby (1.2.2)
     cri (2.15.11)
     ddmetrics (1.0.1)
@@ -35,6 +35,7 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     memo_wise (1.7.0)
+    mini_portile2 (2.8.7)
     nanoc (4.12.16)
       addressable (~> 2.5)
       colored (~> 1.2)
@@ -73,9 +74,8 @@ GEM
       listen (~> 3.0)
       nanoc-cli (~> 4.11, >= 4.11.14)
       nanoc-core (~> 4.11, >= 4.11.14)
-    nokogiri (1.15.2-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.15.2-x86_64-linux)
+    nokogiri (1.15.2)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     parallel (1.23.0)
     pastel (0.8.0)
@@ -111,6 +111,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  arm64-darwin-23
   x86_64-linux
 
 DEPENDENCIES

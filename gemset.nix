@@ -52,6 +52,16 @@
     };
     version = "1.2";
   };
+  commonmarker = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "sha256-k8QvNCIJXoC2l1Gb0s5M5sbQcK1g2XxyqxXeTtBdrXI=";
+      type = "gem";
+    };
+    version = "1.0.4-arm64-darwin";
+  };
   concurrent-ruby = {
     groups = ["default" "nanoc"];
     platforms = [];
@@ -185,6 +195,16 @@
     };
     version = "1.7.0";
   };
+  mini_portile2 = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1q1f2sdw3y3y9mnym9dhjgsjr72sq975cfg5c4yx7gwv8nmzbvhk";
+      type = "gem";
+    };
+    version = "2.8.7";
+  };
   nanoc = {
     dependencies = ["addressable" "colored" "nanoc-checking" "nanoc-cli" "nanoc-core" "nanoc-deploying" "parallel" "tty-command" "tty-which"];
     groups = ["default"];
@@ -250,6 +270,17 @@
       type = "gem";
     };
     version = "1.0.0";
+  };
+  nokogiri = {
+    dependencies = ["mini_portile2" "racc"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1mr2ibfk874ncv0qbdkynay738w2mfinlkhnbd5lyk5yiw5q1p10";
+      type = "gem";
+    };
+    version = "1.15.2";
   };
   parallel = {
     groups = ["default"];
